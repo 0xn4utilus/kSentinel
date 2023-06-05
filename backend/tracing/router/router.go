@@ -6,6 +6,7 @@ import (
 )
 
 func StartRouter(app *fiber.App) {
-	route := app.Group("/api")
+	apiGroup := app.Group("/api")
+	route := apiGroup.Group("/tracing")
 	route.Post("/create_device",controllers.CreateDevice)
 }
