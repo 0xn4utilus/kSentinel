@@ -7,10 +7,10 @@ import (
 
 func StartRouter(app* fiber.App){
 	apiGroup := app.Group("/api")
-	route := apiGroup.Group("/auth")
+	authRouter := apiGroup.Group("/auth")
 
-	route.Get("/test",controllers.Test)
+	authRouter.Get("/test",controllers.Test)
 
-	route.Post("/login",controllers.Login)
-	route.Post("/register",controllers.Register)
+	authRouter.Post("/login",controllers.Login)
+	authRouter.Post("/register",controllers.Register)
 }
