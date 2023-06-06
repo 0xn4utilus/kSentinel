@@ -1,1 +1,0 @@
-savedcmd_/home/sh4dy/InfoSec/kSentinel/core/sample/kprobe_1/module/kmod.mod := printf '%s\n'   kmod.o | awk '!x[$$0]++ { print("/home/sh4dy/InfoSec/kSentinel/core/sample/kprobe_1/module/"$$0) }' > /home/sh4dy/InfoSec/kSentinel/core/sample/kprobe_1/module/kmod.mod
