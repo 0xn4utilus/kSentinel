@@ -4,7 +4,7 @@ Follow the following instructions to get started:
 <hr>
 
 ## kSentinel backend
-The backend is built on the microservices architecture that consists the following four services:
+The backend is built on the microservices architecture that consists of the following four services:
 - tracing
 - auth
 - healthcheck
