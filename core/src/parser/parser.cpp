@@ -1,5 +1,6 @@
 #include<argparse.hpp>
 #include<parser.h>
+#include<utils.h>
 
 void setup_parser(int argc, char** argv){
     argparse::ArgumentParser program("kSentinel");
@@ -16,6 +17,7 @@ void setup_parser(int argc, char** argv){
     }
     if(program["--status"]==true){
         std::cout<<"Checking status of backend..."<<std::endl;
+        check_status();
     }
     else if(program["--config"]==true){
         std::cout<<"Reading config file"<<std::endl;
