@@ -2,6 +2,7 @@
 #define RUNNER_H
 #include<sys/stat.h>
 #include<semaphore.h>
+#include<string>
 
 #define KS_SEMAPHORE "ks-semaphore"
 class Runner{
@@ -9,7 +10,8 @@ class Runner{
     public:
     bool is_ksentinel_running();
     void run();
-    static void sigint_handler(int);
+    static void term_sighandler(int);
+    static bool ks_fatal(std::string message);
     ~Runner();
 };
 #endif

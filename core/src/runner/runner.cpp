@@ -3,49 +3,54 @@
 #include<iostream>
 #include<signal.h>
 #include<errno.h>
+#include<models.h>
+#include<networking.hpp>
+#include<device.hpp>
 
-sem_t* globalSemaphore;
 bool Runner::is_ksentinel_running(){
     sem_t* semaphore = sem_open(KS_SEMAPHORE,O_CREAT|O_EXCL,0644,1);
     if(semaphore==SEM_FAILED){
         if(errno==EEXIST){
-            std::cout<<"Another instance of kSentinel is already running\n";
-            std::exit(0);
+            ks_fatal("Error! Another instance of kSentinel is already running");
         }
         else{
-            std::cout<<"Semaphore creation failed\n";
-            std::exit(0);
+            ks_fatal("ks-semaphore creation failed");
         }
     }
     else{
         this->semaphore = semaphore;
-        globalSemaphore = semaphore;
-        std::cout<<"Started kSentinel\n";
+        std::cout<<"Starting kSentinel...\n";
     }
     return false;
 }
 
 void Runner::run(){
-    signal(SIGINT,sigint_handler);
+    signal(SIGINT,term_sighandler);
+    signal(SIGTSTP,term_sighandler);
+    HttpRequest httpRequest("http://127.0.0.1:8000");
+    std::unordered_map<std::string,std::string>umap;
+    umap["name"] = "shady";
+    umap["age"] = "18";
+    std::unique_ptr<http_response>response = httpRequest.http_post(umap);
+    std::cout<<response->response<<std::endl;
     while(1){
     }
 }
 
 Runner::~Runner(){
-    if(sem_destroy(this->semaphore)==0){
-        std::cout<<"Destroyed semaphore\n";
-    }
-    else{
-        std::cout<<"Failed to destroy semaphore\n";
+    if(sem_unlink(KS_SEMAPHORE)!=0){
+        ks_fatal("Failed to unlink ks-semaphore");
     }
 }
 
-void Runner::sigint_handler(int signum){
-    if(sem_destroy(globalSemaphore)==0){
-        std::cout<<"Destroyed semaphore\n";
+void Runner::term_sighandler(int signum){
+    if(sem_unlink(KS_SEMAPHORE)!=0){
+        ks_fatal("Failed to unlink ks-semaphore");
     }
-    else{
-        std::cout<<"Failed to destroy semaphore\n";
-    }
-    std::exit(0);
+    ks_fatal("Shutting down kSentinel..");
+}
+
+bool Runner::ks_fatal(std::string message){
+    std::cerr<<message<<std::endl;
+    std::exit(1);
 }

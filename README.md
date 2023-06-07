@@ -10,14 +10,17 @@ The backend is built on the microservices architecture that consists of the foll
 - healthcheck
 - apisecurity
 
-### API Routes (Tracing)
-/api/register -> Register a new user <br>
-/api/login -> Login <br>
-/api/auth/create_device  -> Register a new device <br>
-
-
+### API Routes (Auth)
+```
+POST /api/auth/register -> Register a new user
+POST /api/auth/login -> Login
+```
 <hr>
 
+### API Routes (kscore)
+```
+POST /api/kscore/device -> Register a new device
+```
 ## kSentinel core
 - Clone the repository 
 ```
