@@ -33,9 +33,9 @@ git clone https://github.com/InfoSecIITR/kSentinel
 - `progs` - Contains eBPF programs
 - `tests` - Contains tests for automated testing
 
-### Configuration File
+### Environment Variables
 ```
-~/.kSentinel/config.yml
+KS_CONFIG_DIR -> Absolute path of a directory to store logs and configuration files. It must be set by the user
 ```
 
 <hr>
