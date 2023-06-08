@@ -3,6 +3,7 @@
 #include<pwd.h>
 #include<utils.hpp>
 #include<sys/utsname.h>
+#include<fstream>
 
 std::string DeviceUtils::get_username(){
     uid_t uid = geteuid();
@@ -29,9 +30,61 @@ std::string DeviceUtils::get_kernel_version(){
 }
 
 bool DeviceUtils::register_device(){
-    
+
 }
 
 bool DeviceUtils::is_device_registered(){
     
+}
+
+bool DockerDetection::is_docker_container(){
+    if(this->detect_container_m1()||this->detect_container_m2()||this->detect_container_m3()){
+        return true;
+    }
+    return false;
+}
+
+bool DockerDetection::detect_container_m1(){
+    std::ifstream ifile;
+    ifile.open("/.dockerenv");
+    if(ifile){
+        return true;
+    }
+    return false;
+}
+
+bool DockerDetection::detect_container_m2(){
+    std::ifstream ifile("/proc/1/sched");
+    std::stringstream buffer;
+    std::string bufstr;
+    if(ifile){
+        buffer<<ifile.rdbuf();
+        bufstr = buffer.str();
+        if(bufstr.substr(0,4)!="init" || bufstr.substr(0,7)!="systemd"){
+            return true;
+        }
+    }
+    return false;
+}
+
+bool DockerDetection::detect_container_m3(){
+
+}
+
+bool VMDetection::is_virtual_machine(){
+
+}
+
+std::string HostDetection::detect_host(){
+    struct utsname utsbuffer;
+    uname(&utsbuffer);
+    return std::string(utsbuffer.machine);
+}
+
+std::string DockerDetection::detect_host(){
+    return "docker_container";
+}
+
+std::string VMDetection::detect_host(){
+    return "virtual_machine";
 }

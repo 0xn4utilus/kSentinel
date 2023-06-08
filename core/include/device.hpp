@@ -10,4 +10,24 @@ class DeviceUtils{
     bool register_device();
     bool is_device_registered();
 };
+
+class HostDetection{
+    public:
+    virtual std::string detect_host();
+};
+
+class DockerDetection:public HostDetection{
+    public:
+    std::string detect_host();
+    bool is_docker_container();
+    bool detect_container_m1();
+    bool detect_container_m2();
+    bool detect_container_m3();
+};
+
+class VMDetection:public HostDetection{
+    public:
+    std::string detect_host();
+    bool is_virtual_machine();
+};
 #endif
