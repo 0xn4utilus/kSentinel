@@ -22,6 +22,7 @@ POST /api/auth/login -> Login
 POST /api/kscore/device -> Register a new device
 ```
 ## kSentinel core
+- Install libcurl using `sudo apt install libcurl4-openssl-dev`
 - Clone the repository 
 ```
 git clone https://github.com/InfoSecIITR/kSentinel
