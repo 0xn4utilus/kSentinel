@@ -45,18 +45,21 @@ const Register = () => {
                 <TextField
                     className={classes.input}
                     label="Username"
+                    name="username"
                     variant="outlined"
                     fullWidth
                 />
                 <TextField
                     className={classes.input}
                     label="Email"
+                    name="email"
                     variant="outlined"
                     fullWidth
                 />
                 <TextField
                     className={classes.input}
                     label="Password"
+                    name="password"
                     variant="outlined"
                     fullWidth
                     type="password"
