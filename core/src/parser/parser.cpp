@@ -4,6 +4,7 @@
 #include<yaml.hpp>
 #include<envvars.h>
 #include<runner.hpp>
+#include<utils.hpp>
 
 void run();
 void setup_parser(int argc, char** argv){
@@ -42,6 +43,7 @@ void setup_parser(int argc, char** argv){
     }
     else if(program["--run"]==true){
         Runner* runner = new Runner();
+        OtherUtils::check_required_env_vars();
         if(!runner->is_ksentinel_running()){
             runner->run();
         }

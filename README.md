@@ -20,6 +20,7 @@ POST /api/auth/login -> Login
 ### API Routes (kscore)
 ```
 POST /api/kscore/device -> Register a new device
+POST /api/kscore/
 ```
 ## kSentinel core
 - Install libcurl using `sudo apt install libcurl4-openssl-dev`

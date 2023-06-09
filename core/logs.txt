@@ -1,0 +1,40 @@
+﻿2023-06-09 23:09:31.130 INFO  [965977] [Logger::info@12] Starting kSentinel
+2023-06-09 23:09:31.131 FATAL [965977] [Logger::fatal@21] Another instance of kSentinel is already running
+2023-06-09 23:09:39.635 INFO  [966168] [Logger::info@12] Starting kSentinel
+2023-06-09 23:09:42.834 INFO  [966310] [Logger::info@12] Starting kSentinel
+2023-06-09 23:09:48.339 INFO  [966358] [Logger::info@12] Starting kSentinel
+2023-06-09 23:09:52.350 INFO  [966403] [Logger::info@12] Starting kSentinel
+2023-06-09 23:09:54.491 INFO  [966551] [Logger::info@12] Starting kSentinel
+2023-06-09 23:09:54.492 FATAL [966551] [Logger::fatal@21] Another instance of kSentinel is already running
+2023-06-09 23:09:57.643 INFO  [966567] [Logger::info@12] Starting kSentinel
+2023-06-09 23:10:18.403 INFO  [967066] [Logger::info@12] Starting kSentinel
+2023-06-09 23:10:21.950 INFO  [967081] [Logger::info@12] Starting kSentinel
+2023-06-09 23:10:21.950 ERROR [967081] [Logger::error@18] Another instance of kSentinel is already running
+2023-06-09 23:11:38.931 INFO  [968534] [Logger::info@12] Starting kSentinel
+2023-06-09 23:11:40.532 INFO  [968542] [Logger::info@12] Starting kSentinel
+2023-06-09 23:11:40.532 ERROR [968542] [Logger::error@18] Another instance of kSentinel is already running
+2023-06-09 23:11:45.155 INFO  [968707] [Logger::info@12] Starting kSentinel
+2023-06-09 23:12:01.997 INFO  [969034] [Logger::info@12] Starting kSentinel
+2023-06-09 23:12:03.522 INFO  [969049] [Logger::info@12] Starting kSentinel
+2023-06-09 23:12:03.522 FATAL [969049] [Logger::fatal@21] Another instance of kSentinel is already running
+2023-06-09 23:12:04.235 INFO  [969071] [Logger::info@12] Starting kSentinel
+2023-06-09 23:12:04.235 FATAL [969071] [Logger::fatal@21] Another instance of kSentinel is already running
+2023-06-09 23:12:05.219 INFO  [969087] [Logger::info@12] Starting kSentinel
+2023-06-09 23:12:05.219 FATAL [969087] [Logger::fatal@21] Another instance of kSentinel is already running
+2023-06-09 23:12:06.459 INFO  [969104] [Logger::info@12] Starting kSentinel
+2023-06-09 23:12:06.459 FATAL [969104] [Logger::fatal@21] Another instance of kSentinel is already running
+2023-06-09 23:12:07.718 INFO  [969246] [Logger::info@12] Starting kSentinel
+2023-06-09 23:12:07.718 FATAL [969246] [Logger::fatal@21] Another instance of kSentinel is already running
+2023-06-09 23:12:11.251 INFO  [969284] [Logger::info@12] Starting kSentinel
+2023-06-09 23:12:11.251 FATAL [969284] [Logger::fatal@21] Another instance of kSentinel is already running
+2023-06-09 23:13:54.147 INFO  [971102] [Logger::info@12] Starting kSentinel
+2023-06-09 23:13:55.682 INFO  [971103] [Logger::info@12] Starting kSentinel
+2023-06-09 23:13:55.682 FATAL [971103] [Logger::fatal@21] Another instance of kSentinel is already running
+2023-06-09 23:13:59.675 INFO  [971264] [Logger::info@12] Starting kSentinel
+2023-06-09 23:13:59.675 FATAL [971264] [Logger::fatal@21] Another instance of kSentinel is already running
+2023-06-09 23:18:00.463 INFO  [976042] [Logger::info@12] Starting kSentinel
+2023-06-09 23:18:03.466 INFO  [976187] [Logger::info@12] Starting kSentinel
+2023-06-09 23:18:08.906 INFO  [976259] [Logger::info@12] Starting kSentinel
+2023-06-09 23:18:08.906 FATAL [976259] [Logger::fatal@21] Another instance of kSentinel is already running
+2023-06-09 23:18:10.210 INFO  [976282] [Logger::info@12] Starting kSentinel
+2023-06-09 23:18:10.210 FATAL [976282] [Logger::fatal@21] Another instance of kSentinel is already running

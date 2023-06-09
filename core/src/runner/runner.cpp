@@ -6,20 +6,25 @@
 #include<models.h>
 #include<networking.hpp>
 #include<device.hpp>
+#include<logger.hpp>
+
+Runner:: Runner(){
+    log = new Logger;
+}
 
 bool Runner::is_ksentinel_running(){
+    log->info("Starting kSentinel");
     sem_t* semaphore = sem_open(KS_SEMAPHORE,O_CREAT|O_EXCL,0644,1);
     if(semaphore==SEM_FAILED){
         if(errno==EEXIST){
-            ks_fatal("Error! Another instance of kSentinel is already running");
+            log->fatal("Another instance of kSentinel is already running");
         }
         else{
-            ks_fatal("ks-semaphore creation failed");
+            log->fatal("ks-semaphore creation failed");
         }
     }
     else{
         this->semaphore = semaphore;
-        std::cout<<"Starting kSentinel...\n";
     }
     return false;
 }
@@ -39,8 +44,9 @@ void Runner::run(){
 
 Runner::~Runner(){
     if(sem_unlink(KS_SEMAPHORE)!=0){
-        ks_fatal("Failed to unlink ks-semaphore");
+        log->fatal("Failed to unlink ks-semaphore");
     }
+    delete log;
 }
 
 void Runner::term_sighandler(int signum){
@@ -50,7 +56,7 @@ void Runner::term_sighandler(int signum){
     ks_fatal("Shutting down kSentinel..");
 }
 
-bool Runner::ks_fatal(std::string message){
+void Runner::ks_fatal(std::string message){
     std::cerr<<message<<std::endl;
     std::exit(1);
 }

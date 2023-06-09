@@ -29,5 +29,8 @@ class VMDetection:public HostDetection{
     public:
     std::string detect_host();
     bool is_virtual_machine();
+    bool detect_vm_m1();
+    bool detect_vm_m2();
+    bool detect_vm_m3();
 };
 #endif
