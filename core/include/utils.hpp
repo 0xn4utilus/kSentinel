@@ -6,6 +6,19 @@
 #include<cstring>
 #include<iostream>
 #include<fstream>
+
+#define SMALLCASE_ALPHABETS "abcdefghijklmnopqrstuvwxyz"
+#define UPPERCASE_ALPHABETS "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
+#define NUMS "0123456789"
+#define MIXED_CHARS "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789" 
+#define MIXED_ALPHABETS "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ"
+
+#define TYPE_SMALLCASE 0x1
+#define TYPE_UPPERCASE 0x2
+#define TYPE_ALPHAMIXED 0x3
+#define TYPE_FULLMIXED 0x4
+#define TYPE_NUMBER 0x5
+
 bool check_status();
 
 class FileUtils{
@@ -43,5 +56,11 @@ class YamlUtils:public FileUtils{
         Yaml::Parse(root,configFile.c_str());
         return root[key].As<T>();
     }
+};
+
+class OtherUtils{
+    public:
+    static std::string generate_rand_string(int len, int type);
+    static int generate_random_num(int lower,int upper);
 };
 #endif

@@ -7,5 +7,6 @@ import (
 )
 
 func CreateDevice(c *fiber.Ctx)error{
+	
 	return c.Status(http.StatusOK).SendString("Created a new device");
 }
