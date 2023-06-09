@@ -45,12 +45,14 @@ const LoginPage = () => {
         <TextField
           className={classes.input}
           label="Username"
+          name="username"
           variant="outlined"
           fullWidth
         />
         <TextField
           className={classes.input}
           label="Password"
+          name="password"
           variant="outlined"
           fullWidth
           type="password"
