@@ -49,3 +49,10 @@ std::string OtherUtils::generate_rand_string(int len, int type){
     }
     return rand_str;
 }
+
+void OtherUtils::check_required_env_vars(){
+    if(!std::getenv("KS_CONFIG_DIR")){
+        puts("Environment variable KS_CONFIG_DIR not found");
+        exit(0);
+    }
+}

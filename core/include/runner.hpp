@@ -3,15 +3,18 @@
 #include<sys/stat.h>
 #include<semaphore.h>
 #include<string>
+#include<logger.hpp>
 
 #define KS_SEMAPHORE "ks-semaphore"
 class Runner{
     sem_t* semaphore;
+    Logger* log;
     public:
     bool is_ksentinel_running();
     void run();
+    Runner();
     static void term_sighandler(int);
-    static bool ks_fatal(std::string message);
+    static void ks_fatal(std::string message);
     ~Runner();
 };
 #endif

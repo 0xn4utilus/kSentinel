@@ -20,6 +20,7 @@ POST /api/auth/login -> Login
 ### API Routes (kscore)
 ```
 POST /api/kscore/device -> Register a new device
+POST /api/kscore/
 ```
 ## kSentinel core
 - Clone the repository 

@@ -72,7 +72,7 @@ bool DockerDetection::detect_container_m3(){
 }
 
 bool VMDetection::is_virtual_machine(){
-
+    
 }
 
 std::string HostDetection::detect_host(){
