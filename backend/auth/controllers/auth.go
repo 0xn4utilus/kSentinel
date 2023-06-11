@@ -4,9 +4,8 @@ import (
 	"fmt"
 	"log"
 	"net/http"
+	"os"
 	"time"
-
-	"github.com/InfoSecIITR/kSentinel/auth/config"
 	"github.com/InfoSecIITR/kSentinel/auth/models"
 	"github.com/gofiber/fiber/v2"
 	"github.com/golang-jwt/jwt/v4"
@@ -50,8 +49,8 @@ func Register(c *fiber.Ctx) error {
 	if userParser.Username == "" || userParser.Email == "" || userParser.Password == "" {
 		return c.Status(http.StatusBadRequest).SendString("All fields are required")
 	}
-	if len(userParser.Username) > 72 || len(userParser.Email) > 72 || len(userParser.Password) > 72 {
-		return c.Status(http.StatusBadRequest).SendString("Maximum length of feilds exceeded")
+	if len(userParser.Username) > 20 || len(userParser.Email) > 255 || len(userParser.Password) > 255 {
+		return c.Status(http.StatusBadRequest).SendString("Maximum length of fields exceeded")
 	}
 
 	if user, err := models.GetUserInfoByUsername(userParser.Username); err == nil {
@@ -82,7 +81,7 @@ func Login(c *fiber.Ctx) error {
 	}
 
 	if len(userParser.Username) > 72 || len(userParser.Password) > 72 {
-		return c.Status(http.StatusBadRequest).SendString("Maximum length of feilds exceeded")
+		return c.Status(http.StatusBadRequest).SendString("Maximum length of fields exceeded")
 	}
 
 	if userParser.Username != "" {
@@ -100,7 +99,7 @@ func Login(c *fiber.Ctx) error {
 			}
 			token := jwt.NewWithClaims(jwt.SigningMethodHS256, claims)
 			// Create the JWT string
-			jwtKey  := []byte(config.JWT_SECRET)
+			jwtKey  := []byte(os.Getenv("JWT_SECRET"))
 			tokenString, err := token.SignedString(jwtKey)
 			if err != nil {
 				log.Println(err)
