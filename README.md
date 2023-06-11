@@ -22,6 +22,17 @@ POST /api/auth/login -> Login
 POST /api/kscore/device -> Register a new device
 POST /api/kscore/
 ```
+
+### Environment Variables (Auth Service)
+```
+DB_USER = 
+DB_PASSWORD = 
+DB_PORT = 
+DB_HOST = 
+DB_NAME = 
+JWT_SECRET = 
+ALLOWED_ORIGINS = "http://127.0.0.1:5173, http://localhost:5173"
+```
 ## kSentinel core
 - Install libcurl using `sudo apt install libcurl4-openssl-dev`
 - Clone the repository 
