@@ -1,0 +1,1 @@
+export const registerRoute = import.meta.env.VITE_AUTH_API_URL + "/api/auth/register";

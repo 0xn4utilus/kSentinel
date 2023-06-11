@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { TextField, Box, Button, Typography } from '@material-ui/core';
 import LockOutlinedIcon from '@material-ui/icons/LockOutlined';
 import { makeStyles } from '@material-ui/core/styles';
@@ -34,7 +34,11 @@ const useStyles = makeStyles((theme) => ({
 
 const LoginPage = () => {
   const classes = useStyles();
+  const [userData,setUserData] = useState({"username":"","password":""});
 
+  function submitData(){
+
+  }
   return (
     <div className={classes.container}>
       <div className={classes.formContainer}>
@@ -46,6 +50,9 @@ const LoginPage = () => {
           className={classes.input}
           label="Username"
           name="username"
+          onChange={(e)=>{
+            setUserData({username:e.target.value,password:userData.password});
+          }}
           variant="outlined"
           fullWidth
         />
@@ -56,12 +63,16 @@ const LoginPage = () => {
           variant="outlined"
           fullWidth
           type="password"
+          onChange={(e)=>{
+            setUserData({username:userData.username,password:e.target.value});
+          }}
         />
         <Button
           className={classes.submitButton}
           variant="contained"
           color="primary"
           fullWidth
+          onClick={submitData}
         >
           Submit
         </Button>

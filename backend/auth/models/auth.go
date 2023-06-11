@@ -2,7 +2,7 @@ package models;
 
 // user details
 type User struct{
-	Id int64 
+	Id string 
 	Username string
 	Email string
 	Password string
