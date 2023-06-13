@@ -4,6 +4,7 @@
 #include<yaml.hpp>
 #include<envvars.h>
 #include<runner.hpp>
+#include<auth.hpp>
 #include<utils.hpp>
 
 void run();
@@ -13,6 +14,7 @@ void setup_parser(int argc, char** argv){
     program.add_argument("--status").help("Check status of the kSentinel backend").default_value(false).implicit_value(true);
     program.add_argument("--config").help("Read the configuration file").default_value(false).implicit_value(true);
     program.add_argument("--run").help("Run kSentinel").default_value(false).implicit_value(true);
+    program.add_argument("--login").help("Login to kSentinel server").default_value(false).implicit_value(true);
 
     try{
         program.parse_args(argc,argv);
@@ -40,6 +42,11 @@ void setup_parser(int argc, char** argv){
             }
             delete fileUtils;
         }
+    }
+    else if(program["--login"]==true){
+        Auth* auth = new Auth;
+        auth->login();
+        delete auth;
     }
     else if(program["--run"]==true){
         Runner* runner = new Runner();

@@ -1,18 +1,23 @@
 package controllers
 
 import (
+	"encoding/json"
 	"fmt"
 	"log"
 	"net/http"
 	"os"
 	"time"
+
 	"github.com/InfoSecIITR/kSentinel/auth/models"
 	"github.com/gofiber/fiber/v2"
 	"github.com/golang-jwt/jwt/v4"
 	"golang.org/x/crypto/bcrypt"
 )
 
-
+type LoginResponse struct{
+	Message string
+	Token string
+}
 
 type UserParser struct {
 	Username string `json:"username"`
@@ -71,23 +76,40 @@ func Register(c *fiber.Ctx) error {
 }
 
 func Login(c *fiber.Ctx) error {
+	var resp LoginResponse
+	var jsonResp []byte
 	userParser := new(UserParser)
 	if err := c.BodyParser(userParser); err != nil {
 		log.Println(err)
 	}
 
 	if userParser.Username == "" || userParser.Password == "" {
-		return c.Status(http.StatusBadRequest).SendString("All fields are required")
+		resp = LoginResponse{
+			Message:"All fields are required",
+			Token:"",
+		}
+		jsonResp, _ = json.Marshal(resp)
+		return c.Status(http.StatusBadRequest).SendString(string(jsonResp))
 	}
 
 	if len(userParser.Username) > 72 || len(userParser.Password) > 72 {
-		return c.Status(http.StatusBadRequest).SendString("Maximum length of fields exceeded")
+		resp = LoginResponse{
+			Message:"Maximum length of fields exceeded",
+			Token:"",
+		}
+		jsonResp, _ = json.Marshal(resp) 
+		return c.Status(http.StatusBadRequest).SendString(string(jsonResp))
 	}
 
 	if userParser.Username != "" {
 		userDetails, _ := models.GetUserInfoByUsername(userParser.Username)
 		if userDetails.Username == "" {
-			return c.Status(http.StatusBadRequest).SendString("Username not found")
+			resp = LoginResponse{
+				Message:"Username not found",
+				Token:"",
+			}
+			jsonResp,_ = json.Marshal(resp)
+			return c.Status(http.StatusBadRequest).SendString(string(jsonResp))
 		}
 		if err := ComparePassword(userDetails.Password, userParser.Password); err == nil {
 			expirationTime := time.Now().Add(7 * 24 * time.Hour)
@@ -103,7 +125,12 @@ func Login(c *fiber.Ctx) error {
 			tokenString, err := token.SignedString(jwtKey)
 			if err != nil {
 				log.Println(err)
-				return c.Status(http.StatusInternalServerError).SendString("Login Failed")
+				resp = LoginResponse{
+					Message:"Login failed",
+					Token:"",
+				}
+				jsonResp,_ = json.Marshal(resp)
+				return c.Status(http.StatusInternalServerError).SendString(string(jsonResp))
 			}
 			// Set Cookie
 			cookie := new(fiber.Cookie)
@@ -112,10 +139,19 @@ func Login(c *fiber.Ctx) error {
 			cookie.Expires = expirationTime
 
 			c.Cookie(cookie)
-			return c.Status(http.StatusOK).SendString("Login successful")
+			resp = LoginResponse{
+				Message:"Login successful",
+				Token:tokenString,
+			}
+			jsonResp,_ = json.Marshal(resp)
+			return c.Status(http.StatusOK).SendString(string(jsonResp))
 		}
 
 	}
-
-	return c.Status(http.StatusUnauthorized).SendString("Login Failed")
+	resp = LoginResponse{
+		Message:"Login failed",
+		Token:"",
+	}
+	jsonResp,_ = json.Marshal(resp)
+	return c.Status(http.StatusUnauthorized).SendString(string(jsonResp))
 }
