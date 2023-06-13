@@ -3,6 +3,7 @@
 #include<string>
 class DeviceUtils{
     public:
+    static void check_all_env_vars();
     std::string get_username();
     std::string get_device_id();
     std::string generate_device_id();

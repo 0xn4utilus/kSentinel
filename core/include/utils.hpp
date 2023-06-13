@@ -24,6 +24,9 @@ bool check_status();
 class FileUtils{
     std::string filename;
     public:
+    FileUtils(){
+
+    }
     FileUtils(std::string filename){
         this->filename = filename.c_str();
     }
@@ -45,6 +48,7 @@ class FileUtils{
 template<class T>
 class YamlUtils:public FileUtils{
     public:
+    YamlUtils(){}
     T read_config_var(std::string key){
         const char* configDir = std::getenv(KS_CONFIG_DIR);
         if(!configDir){
@@ -53,7 +57,13 @@ class YamlUtils:public FileUtils{
         }
         std::string configFile = std::string(configDir)+"/config.yml";
         Yaml::Node root;
-        Yaml::Parse(root,configFile.c_str());
+        try{
+            Yaml::Parse(root,configFile.c_str());
+        }
+        catch(Yaml::ParsingException){
+            std::cerr<<"Error! Syntax error in "+configFile;
+            std::exit(1);
+        }
         return root[key].As<T>();
     }
 };

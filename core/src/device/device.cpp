@@ -5,6 +5,16 @@
 #include<sys/utsname.h>
 #include<fstream>
 
+void DeviceUtils::check_all_env_vars(){
+    bool error = false;
+    if(!std::getenv("KS_CONFIG_DIR")){
+        error = true;
+        std::cerr<<"Environment variable KS_CONFIG_DIR not found"<<std::endl;
+    }
+    if(error){
+        std::exit(1);
+    }
+}
 std::string DeviceUtils::get_username(){
     uid_t uid = geteuid();
     passwd* pw = getpwuid(uid);
