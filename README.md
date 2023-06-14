@@ -1,3 +1,11 @@
+## Get started
+
+Install the latest version of docker and docker-compose and run the command:
+```
+docker-compose up
+```
+It will start the frontend, services and the database containers. Visit http://127.0.0.1:4173 to view the kSentinel UI.
+
 # Development
 Follow the following instructions to get started:
 

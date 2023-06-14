@@ -1,0 +1,39 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: kscore-deployment
+spec:
+  selector:
+    matchLabels:
+      app: kscore
+  template:
+    metadata:
+      labels:
+        app: kscore
+    spec:
+      containers:
+      - name: kscore
+        image: sh4dy0011/kscore
+        resources:
+          limits:
+            memory: "128Mi"
+            cpu: "500m"
+        ports:
+        - containerPort: 9000
+        env:
+          - name: KSCORE_SERVICE_PORT
+            value: "9000"
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: kscore-service
+spec:
+  selector:
+    app: kscore
+  type: LoadBalancer
+  ports:
+  - port: 9000
+    targetPort: 9000
+    nodePort: 32000
+

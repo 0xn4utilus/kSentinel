@@ -1,0 +1,46 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: ksentinel
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: authdb
+  template:
+    metadata:
+      labels:
+        app: authdb
+    spec:
+      containers:
+        - name: authdb
+          image: mysql
+          env:
+            - name: MYSQL_ROOT_PASSWORD
+              value: ksenchan
+            - name: MYSQL_USER
+              value: ksenchan
+            - name: MYSQL_PASSWORD
+              value: ksenchan
+            - name: MYSQL_DATABASE
+              value: ksenchan
+          ports:
+            - containerPort: 3306
+              name: authdb
+          resources:
+            limits:
+              cpu: "100m"
+              memory: "500M"
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: authdb-service
+spec:
+  selector:
+    app: authdb
+  ports:
+    - protocol: TCP
+      port: 3306
+      targetPort: 3306
+  type: ClusterIP
