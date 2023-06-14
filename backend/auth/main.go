@@ -1,8 +1,10 @@
 package main
 
 import (
+	"fmt"
 	"log"
 	"os"
+
 	"github.com/InfoSecIITR/kSentinel/auth/models"
 	"github.com/InfoSecIITR/kSentinel/auth/router"
 	"github.com/gofiber/fiber/v2"
@@ -10,9 +12,43 @@ import (
 	"github.com/joho/godotenv"
 )
 
+func load_env_vars()bool{
+	var error bool
+	if os.Getenv("ALLOWED_ORIGINS")==""{
+		fmt.Println("ALLOWED_ORIGINS not found")
+		error = true
+	}
+	if os.Getenv("DB_USER")==""{
+		fmt.Println("DB_USER not found")
+		error = true
+	}
+	if os.Getenv("DB_PASSWORD")==""{
+		fmt.Println("DB_PASSWORD not found")
+		error = true
+	}
+	if os.Getenv("DB_HOST")==""{
+		fmt.Println("DB_HOST not found")
+		error = true
+	}
+	if os.Getenv("JWT_SECRET")==""{
+		fmt.Println("JWT_SECRET not found")
+		error = true
+	}
+	if os.Getenv("DB_NAME")==""{
+		fmt.Println("DB_NAME not found")
+		error = true
+	}
+	if os.Getenv("DB_PORT")==""{
+		fmt.Println("DB_PORT not found")
+		error = true
+	}
+	return error
+}
 func main() {
 	if err := godotenv.Load();err!=nil{
-		log.Fatal(err)
+		if load_env_vars()==true{
+			log.Fatal("All environment variables not found")
+		}
 	}
 	if err := models.InitDB(); err != nil {
 		log.Fatal(err)

@@ -22,6 +22,7 @@ Auth::Auth(){
     }
     delete yaml_utils;
 }
+
 void Auth::login(){
     termios oldt;
     std::string username;
@@ -59,4 +60,9 @@ void Auth::login(){
             std::cerr<<message<<std::endl;
         }
     }
+}
+
+bool Auth::is_logged_in(){
+    // Read the token from $KS_CONFIG_DIR/.kst
+    // Validate the token by sending a post request to /api/auth/validate_token
 }

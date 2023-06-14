@@ -9,6 +9,7 @@ class Auth{
     void login();
     std::string get_auth_token();
     bool validate_auth_token();
+    bool is_logged_in();
     void logout();
 };
 #endif
