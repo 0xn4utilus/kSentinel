@@ -12,3 +12,5 @@ cmake_install.cmake
 CMakeCache.txt
 Makefile
 config.go
+*.a
+core/bin/*
