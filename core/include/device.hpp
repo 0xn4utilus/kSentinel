@@ -27,11 +27,17 @@ class DockerDetection:public HostDetection{
 };
 
 class VMDetection:public HostDetection{
+    private:
+        std::string chassisNumber;
+        std::string sysVendor;
+        int ebx = 0,ecx = 0,edx = 0;
+        char vendor[0x10];
+        std::string strVendor;
     public:
-    std::string detect_host();
-    bool is_virtual_machine();
-    bool detect_vm_m1();
-    bool detect_vm_m2();
-    bool detect_vm_m3();
+        std::string detect_host();
+        bool is_virtual_machine();
+        bool detect_vm_m1();
+        bool detect_vm_m2();
+        bool detect_vm_m3();
 };
 #endif

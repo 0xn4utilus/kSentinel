@@ -1,9 +1,11 @@
-#include<device.hpp>
-#include<unistd.h>
-#include<pwd.h>
-#include<utils.hpp>
-#include<sys/utsname.h>
-#include<fstream>
+#include <device.hpp>
+#include <unistd.h>
+#include <pwd.h>
+#include <utils.hpp>
+#include <sys/utsname.h>
+#include <fstream>
+#include <uberswitch.hpp>
+#include <algorithm>
 
 void DeviceUtils::check_all_env_vars(){
     bool error = false;
@@ -81,8 +83,76 @@ bool DockerDetection::detect_container_m3(){
 
 }
 
-bool VMDetection::is_virtual_machine(){
+bool VMDetection::detect_vm_m1(){
+    std::ifstream sysVendorFile("/sys/class/dmi/id/sys_vendor");
+    if(sysVendorFile.is_open()){
+        std::getline(sysVendorFile,sysVendor);
+        uswitch(sysVendor){
+            ucase("VMware, Inc."):
+                return true;
+            ucase("QEMU"):
+                return true;
+            ucase("innotek GmbH"):
+                return true;
+            default:
+                return false;
+        }
+    }
+    return true;
+}
+
+bool VMDetection::detect_vm_m2(){
+    std::ifstream chassisNumberFile("/sys/class/dmi/id/chassis_serial");
+    if(chassisNumberFile.is_open()){
+        std::getline(chassisNumberFile,chassisNumber);
+        std::transform(chassisNumber.begin(),chassisNumber.end(),chassisNumber.begin(), ::tolower);
+        uswitch(chassisNumber){
+            ucase(""):
+                return true;
+            ucase("0"):
+                return true;
+            ucase("none"):
+                return true;
+            default:
+                return false;
+        }
+    }
+    return true;
+}
+
+bool VMDetection::detect_vm_m3(){
+	__asm__ volatile("cpuid" \
+			: "=b"(ebx), \
+			"=c"(ecx), \
+			"=d"(edx) \
+			: "a"(0x40000000));
+	sprintf(vendor  , "%c%c%c%c", ebx, (ebx >> 8), (ebx >> 16), (ebx >> 24));
+	sprintf(vendor+4, "%c%c%c%c", ecx, (ecx >> 8), (ecx >> 16), (ecx >> 24));
+	sprintf(vendor+8, "%c%c%c%c", edx, (edx >> 8), (edx >> 16), (edx >> 24));
+	vendor[12] = 0x00;
     
+    strVendor = vendor;
+    uswitch(strVendor){
+        ucase("KVMKVMKVM"):
+            return true;
+        ucase("Microsoft Hv"):
+            return true;
+        ucase("VMwareVMware"):
+            return true;
+        ucase("XenVMMXenVMM"):
+            return true;
+        ucase("prl hyperv"):
+            return true;
+        ucase("VBoxVBoxVBox"):
+            return true;
+        default:
+            return false;
+    }
+    return false;
+}
+
+bool VMDetection::is_virtual_machine(){
+    return this->detect_vm_m1() || this->detect_vm_m2() || this->detect_vm_m3();
 }
 
 std::string HostDetection::detect_host(){
