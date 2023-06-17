@@ -8,7 +8,6 @@
 #define KS_SEMAPHORE "ks-semaphore"
 class Runner{
     sem_t* semaphore;
-    Logger* log;
     public:
     bool is_ksentinel_running();
     void run();

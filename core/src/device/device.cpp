@@ -5,7 +5,21 @@
 #include <sys/utsname.h>
 #include <fstream>
 #include <uberswitch.hpp>
+#include<logger.hpp>
+#include<networking.hpp>
 #include <algorithm>
+
+DeviceUtils::DeviceUtils(){
+    YamlUtils<std::string>* yaml_utils = new YamlUtils<std::string>;
+    std::string kscore_api = yaml_utils->read_config_var("KS_KSCORE_API");
+    if(kscore_api.length()==0){
+        std::cerr<<"Error! Failed to fetch KS_KSCORE_API in the configuration file"<<std::endl;
+        std::exit(1);
+    }
+    this->device_check_url = kscore_api + "/checkdevice";
+    this->device_reg_url = kscore_api + "/device";
+    delete yaml_utils;
+}
 
 void DeviceUtils::check_all_env_vars(){
     bool error = false;
@@ -27,9 +41,21 @@ std::string DeviceUtils::get_username(){
 }
 
 std::string DeviceUtils::generate_device_id(){
+    const char* config_dir = std::getenv("KS_CONFIG_DIR");
+    if(!config_dir){
+        Logger::fatal("Error! Environment variable KS_CONFIG_DIR not found");
+    }
     std::string device_id = this->get_username();
-    std::string rand_string = OtherUtils::generate_rand_string(10,TYPE_NUMBER);
-    device_id += "_"+rand_string;
+    std::ifstream ifile(std::string(config_dir)+"/.ksdata");
+    std::stringstream buffer;
+    buffer<<ifile.rdbuf();
+    if(buffer.str().length()==0){
+        std::string rand_string = OtherUtils::generate_rand_string(10,TYPE_NUMBER);
+        device_id += "_"+rand_string;
+    }
+    else{
+        device_id = buffer.str();
+    }
     return device_id;
 }
 
@@ -41,12 +67,60 @@ std::string DeviceUtils::get_kernel_version(){
     return release;
 }
 
+std::string DeviceUtils::get_device_type(){
+    DockerDetection* docker_detection = new DockerDetection;
+    VMDetection* vm_detection = new VMDetection;
+    HostDetection* host_detection = new HostDetection;
+    std::string host = host_detection->detect_host();
+    if(docker_detection->is_docker_container()){
+        return "Docker container";
+    }
+    if(vm_detection->is_virtual_machine()){
+        return "Virtual machine";
+    }
+    delete docker_detection;
+    delete vm_detection;
+    delete host_detection;
+    return host;
+}
 bool DeviceUtils::register_device(){
-
+    std::unordered_map<std::string,std::string>umap;
+    umap["device_id"] = this->generate_device_id();
+    umap["device_kernel"] = this->get_kernel_version();
+    umap["device_type"] = this->get_device_type();
+    Logger::info("Checking device status");
+    bool result;
+    if(!this->is_device_registered(umap["device_id"])){
+        HttpRequest http_request(this->device_reg_url);
+        std::unique_ptr<http_response>response = http_request.http_post(umap);
+        if(response->success==false || response->status_code!=200){
+            Logger::fatal(response->response);
+        }
+        const char* config_dir = std::getenv("KS_CONFIG_DIR");
+        if(!config_dir){
+            Logger::fatal("Error! Environment variable KS_CONFIG_DIR not found");
+        }
+        std::string metadata_file = std::string(config_dir)+"/"+".ksdata";
+        std::ofstream ofile(metadata_file,std::ios::out);
+        ofile.write(umap["device_id"].c_str(),umap["device_id"].length());
+        ofile.close();
+        Logger::info(response->response);
+    }
+    return result;
 }
 
-bool DeviceUtils::is_device_registered(){
-    
+bool DeviceUtils::is_device_registered(std::string device_id){
+    HttpRequest http_request(this->device_check_url+"/"+device_id);
+    std::unique_ptr<http_response>response =  http_request.http_get();
+    if(response->success==false || response->status_code!=200){
+        Logger::fatal(response->response);
+    }
+    if(response->response=="Device has not been registered yet"){
+        Logger::info(response->response);
+        return false;
+    }
+    Logger::warning(response->response);
+    return true;
 }
 
 bool DockerDetection::is_docker_container(){
@@ -69,18 +143,20 @@ bool DockerDetection::detect_container_m2(){
     std::ifstream ifile("/proc/1/sched");
     std::stringstream buffer;
     std::string bufstr;
+    bool result;
     if(ifile){
         buffer<<ifile.rdbuf();
         bufstr = buffer.str();
         if(bufstr.substr(0,4)!="init" || bufstr.substr(0,7)!="systemd"){
-            return true;
+            result = true;
         }
     }
-    return false;
+    ifile.close();
+    return result;
 }
 
 bool DockerDetection::detect_container_m3(){
-
+    return false;
 }
 
 bool VMDetection::detect_vm_m1(){
@@ -159,12 +235,4 @@ std::string HostDetection::detect_host(){
     struct utsname utsbuffer;
     uname(&utsbuffer);
     return std::string(utsbuffer.machine);
-}
-
-std::string DockerDetection::detect_host(){
-    return "docker_container";
-}
-
-std::string VMDetection::detect_host(){
-    return "virtual_machine";
 }

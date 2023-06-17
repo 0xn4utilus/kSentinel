@@ -2,22 +2,21 @@ package controllers
 
 import (
 	"encoding/json"
-	"fmt"
+	emailverifier "github.com/AfterShip/email-verifier"
+	"github.com/InfoSecIITR/kSentinel/auth/models"
+	"github.com/gin-gonic/gin"
+	"github.com/gofiber/fiber/v2"
+	"github.com/golang-jwt/jwt/v4"
+	"golang.org/x/crypto/bcrypt"
 	"log"
 	"net/http"
 	"os"
 	"time"
-        emailverifier "github.com/AfterShip/email-verifier"
-	"github.com/InfoSecIITR/kSentinel/auth/models"
-	"github.com/gofiber/fiber/v2"
-	"github.com/golang-jwt/jwt/v4"
-	"golang.org/x/crypto/bcrypt"
-	"github.com/gin-gonic/gin"
 )
 
-type LoginResponse struct{
+type LoginResponse struct {
 	Message string
-	Token string
+	Token   string
 }
 
 type UserParser struct {
@@ -35,7 +34,7 @@ func HashPassword(password string) string {
 	passwordByte := []byte(password)
 	hash, err := bcrypt.GenerateFromPassword(passwordByte, bcrypt.DefaultCost)
 	if err != nil {
-		fmt.Println(err)
+		log.Println(err)
 	}
 	return string(hash)
 }
@@ -86,8 +85,8 @@ func Login(c *fiber.Ctx) error {
 
 	if userParser.Username == "" || userParser.Password == "" {
 		resp = LoginResponse{
-			Message:"All fields are required",
-			Token:"",
+			Message: "All fields are required",
+			Token:   "",
 		}
 		jsonResp, _ = json.Marshal(resp)
 		return c.Status(http.StatusBadRequest).SendString(string(jsonResp))
@@ -95,10 +94,10 @@ func Login(c *fiber.Ctx) error {
 
 	if len(userParser.Username) > 72 || len(userParser.Password) > 72 {
 		resp = LoginResponse{
-			Message:"Maximum length of fields exceeded",
-			Token:"",
+			Message: "Maximum length of fields exceeded",
+			Token:   "",
 		}
-		jsonResp, _ = json.Marshal(resp) 
+		jsonResp, _ = json.Marshal(resp)
 		return c.Status(http.StatusBadRequest).SendString(string(jsonResp))
 	}
 
@@ -106,10 +105,10 @@ func Login(c *fiber.Ctx) error {
 		userDetails, _ := models.GetUserInfoByUsername(userParser.Username)
 		if userDetails.Username == "" {
 			resp = LoginResponse{
-				Message:"Username not found",
-				Token:"",
+				Message: "Username not found",
+				Token:   "",
 			}
-			jsonResp,_ = json.Marshal(resp)
+			jsonResp, _ = json.Marshal(resp)
 			return c.Status(http.StatusBadRequest).SendString(string(jsonResp))
 		}
 		if err := ComparePassword(userDetails.Password, userParser.Password); err == nil {
@@ -122,15 +121,15 @@ func Login(c *fiber.Ctx) error {
 			}
 			token := jwt.NewWithClaims(jwt.SigningMethodHS256, claims)
 			// Create the JWT string
-			jwtKey  := []byte(os.Getenv("JWT_SECRET"))
+			jwtKey := []byte(os.Getenv("JWT_SECRET"))
 			tokenString, err := token.SignedString(jwtKey)
 			if err != nil {
 				log.Println(err)
 				resp = LoginResponse{
-					Message:"Login failed",
-					Token:"",
+					Message: "Login failed",
+					Token:   "",
 				}
-				jsonResp,_ = json.Marshal(resp)
+				jsonResp, _ = json.Marshal(resp)
 				return c.Status(http.StatusInternalServerError).SendString(string(jsonResp))
 			}
 			// Set Cookie
@@ -141,19 +140,19 @@ func Login(c *fiber.Ctx) error {
 
 			c.Cookie(cookie)
 			resp = LoginResponse{
-				Message:"Login successful",
-				Token:tokenString,
+				Message: "Login successful",
+				Token:   tokenString,
 			}
-			jsonResp,_ = json.Marshal(resp)
+			jsonResp, _ = json.Marshal(resp)
 			return c.Status(http.StatusOK).SendString(string(jsonResp))
 		}
 
 	}
 	resp = LoginResponse{
-		Message:"Login failed",
-		Token:"",
+		Message: "Login failed",
+		Token:   "",
 	}
-	jsonResp,_ = json.Marshal(resp)
+	jsonResp, _ = json.Marshal(resp)
 	return c.Status(http.StatusUnauthorized).SendString(string(jsonResp))
 }
 
@@ -183,43 +182,43 @@ func verEmailGetHandler(c *gin.Context) {
 }
 
 func verEmailPostHandler(c *gin.Context) {
-	fmt.Println("verEmailPostHandler running")
+	log.Println("verEmailPostHandler running")
 	email := c.PostForm("email")
 	ret, err := verifier.Verify(email)
 	if err != nil {
-		fmt.Println("verify email address failed, error is: ", err)
+		log.Println("verify email address failed, error is: ", err)
 		c.HTML(http.StatusInternalServerError, "ver-email.html", gin.H{"message": "unable to register email addresss, please try again"})
 		return
 	}
 
-	//fmt.Println("email validation result", ret)
-	//fmt.Println("Email:", ret.Email, "\nReachable:", ret.Reachable, "\nSyntax:", ret.Syntax, "\nSMTP:", ret.SMTP, "\nGravatar:", ret.Gravatar, "\nSuggestion:", ret.Suggestion, "\nDisposable:", ret.Disposable, "\nRoleAccount:", ret.RoleAccount, "\nFree:", ret.Free, "\nHasMxRecords:", ret.HasMxRecords)
+	//log.Println("email validation result", ret)
+	//log.Println("Email:", ret.Email, "\nReachable:", ret.Reachable, "\nSyntax:", ret.Syntax, "\nSMTP:", ret.SMTP, "\nGravatar:", ret.Gravatar, "\nSuggestion:", ret.Suggestion, "\nDisposable:", ret.Disposable, "\nRoleAccount:", ret.RoleAccount, "\nFree:", ret.Free, "\nHasMxRecords:", ret.HasMxRecords)
 
 	// needs @ and . for starters
 	if !ret.Syntax.Valid {
-		//fmt.Println("email address syntax is invalid")
+		//log.Println("email address syntax is invalid")
 		c.HTML(http.StatusBadRequest, "ver-email.html", gin.H{"message": "email address syntax is invalid"})
 		return
 	}
 	if ret.Disposable {
-		//fmt.Println("sorry, we do not accept disposable email addresses")
+		//log.Println("sorry, we do not accept disposable email addresses")
 		c.HTML(http.StatusBadRequest, "ver-email.html", gin.H{"message": "sorry, we do not accept disposable email addresses"})
 		return
 	}
 	if ret.Suggestion != "" {
-		//fmt.Println("email address is not reachable, looking for ", ret.Suggestion, "instead?")
+		//log.Println("email address is not reachable, looking for ", ret.Suggestion, "instead?")
 		c.HTML(http.StatusBadRequest, "ver-email.html", gin.H{"message": "email address is not reachable, looking for " + ret.Suggestion + " instead?"})
 		return
 	}
 	// possible return string values: yes, no, unkown
 	if ret.Reachable == "no" {
-		//fmt.Println("email address is not reachable")
+		//log.Println("email address is not reachable")
 		c.HTML(http.StatusBadRequest, "ver-email.html", gin.H{"message": "email address was unreachable"})
 		return
 	}
 	// check MX records so we know DNS setup properly to recieve emails
 	if !ret.HasMxRecords {
-		//fmt.Println("domain entered not properly setup to recieve emails, MX record not found")
+		//log.Println("domain entered not properly setup to recieve emails, MX record not found")
 		c.HTML(http.StatusBadRequest, "ver-email.html", gin.H{"message": "domain entered not properly setup to recieve emails, MX record not found"})
 		return
 	}

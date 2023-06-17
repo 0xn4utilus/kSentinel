@@ -4,12 +4,11 @@
 
 class Logger{
     public:
-    Logger();
-    void info(std::string);
-    void verbose(std::string);
-    void warning(std::string);
-    void error(std::string);
-    void fatal(std::string);
-    void debug(std::string);
+    static void info(std::string);
+    static void verbose(std::string);
+    static void warning(std::string);
+    static void error(std::string);
+    static void fatal(std::string);
+    static void debug(std::string);
 };
 #endif

@@ -5,11 +5,6 @@
 #include<plog/Formatters/TxtFormatter.h>
 #include<envvars.h>
 
-Logger::Logger(){
-    static plog::ColorConsoleAppender<plog::TxtFormatter> consoleAppender;
-    std::string log_file = std::string(std::getenv(KS_CONFIG_DIR))+"/kSentinel_logs.txt";
-    plog::init(plog::verbose,(plog::util::nchar*)log_file.c_str()).addAppender(&consoleAppender);
-}
 void Logger::info(std::string message){
     PLOGI<<message;
 }

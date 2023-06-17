@@ -10,16 +10,13 @@ using json = nlohmann::json;
 
 Auth::Auth(){
     YamlUtils<std::string>*yaml_utils = new YamlUtils<std::string>;
-    this->login_url = yaml_utils->read_config_var("KS_LOGIN_URL");
-    this->logout_url = yaml_utils->read_config_var("KS_LOGOUT_URL");
-    if(this->login_url.length()==0){
-        std::cerr<<"Error! KS_LOGIN_URL not found in the configuration file"<<std::endl;
+    std::string ks_auth_api = yaml_utils->read_config_var("KS_AUTH_API");
+    if(ks_auth_api.length()==0){
+        std::cerr<<"Error! KS_AUTH_API not found in the configuration file"<<std::endl;
         std::exit(1);
     }
-    if(this->logout_url.length()==0){
-        std::cerr<<"Error! KS_LOGOUT_URL not found in the configuration file"<<std::endl;
-        std::exit(1);
-    }
+    this->login_url = ks_auth_api+"/login";
+    this->logout_url = ks_auth_api+"/logout";
     delete yaml_utils;
 }
 
