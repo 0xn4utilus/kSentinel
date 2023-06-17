@@ -2,7 +2,7 @@ package models;
 
 // A device on which kSentinel will run.
 type Device struct{
-	device_id string
-	device_type string  // system/container/pod
-	device_kernel string // kernel version
+	DeviceId string `json:"device_id"`
+	DeviceType string  `json:"device_type"`// system/container/pod
+	DeviceKernel string `json:"device_kernel"`// kernel version
 }

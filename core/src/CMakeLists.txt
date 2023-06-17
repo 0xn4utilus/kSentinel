@@ -1,5 +1,8 @@
 cmake_minimum_required(VERSION 3.25)
+include_directories(${CMAKE_SOURCE_DIR}/include/plog)
+
 include_directories(${CMAKE_SOURCE_DIR}/include)
+
 add_subdirectory(parser)
 add_subdirectory(yaml)
 add_subdirectory(utils)
@@ -10,4 +13,4 @@ add_subdirectory(logging)
 add_subdirectory(auth)
 add_executable(kSentinel ${CMAKE_SOURCE_DIR}/src/main.cpp)
 set(CMAKE_CXX_STANDARD_LIBRARIES "-lcurl")
-target_link_libraries(kSentinel parser utils networking runner device logging auth yaml)
+target_link_libraries(kSentinel  parser  device networking runner utils logging auth yaml)

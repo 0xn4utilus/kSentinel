@@ -2,7 +2,10 @@
 #include<networking.hpp>
 #include<curl/curl.h>
 #include<iostream>
+#include<json/json.hpp>
+#include<json/json_fwd.hpp>
 
+using nlohmann::json;
 size_t HttpRequest::write_callback(void* contents, size_t size,size_t nmemb,std::string* response){
     size_t total_size = nmemb*size;
     response->append((char*)contents,total_size);
@@ -10,12 +13,7 @@ size_t HttpRequest::write_callback(void* contents, size_t size,size_t nmemb,std:
 }
 
 std::string HttpRequest::post_map_to_str(std::unordered_map<std::string,std::string>data){
-    std::string post_data = "";
-    for(auto it:data){
-        post_data += it.first + "="+it.second+"&";
-    }
-    post_data.pop_back();
-    return post_data;
+    return json(data).dump();
 }
 std::unique_ptr<http_response> HttpRequest::http_get(){
     std::unique_ptr<http_response>response = std::make_unique<http_response>();

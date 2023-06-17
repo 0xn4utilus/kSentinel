@@ -12,41 +12,41 @@ import (
 	"github.com/joho/godotenv"
 )
 
-func load_env_vars()bool{
+func load_env_vars() bool {
 	var error bool
-	if os.Getenv("ALLOWED_ORIGINS")==""{
-		fmt.Println("ALLOWED_ORIGINS not found")
+	if os.Getenv("ALLOWED_ORIGINS") == "" {
+		log.Println("ALLOWED_ORIGINS not found")
 		error = true
 	}
-	if os.Getenv("DB_USER")==""{
-		fmt.Println("DB_USER not found")
+	if os.Getenv("DB_USER") == "" {
+		log.Println("DB_USER not found")
 		error = true
 	}
-	if os.Getenv("DB_PASSWORD")==""{
-		fmt.Println("DB_PASSWORD not found")
+	if os.Getenv("DB_PASSWORD") == "" {
+		log.Println("DB_PASSWORD not found")
 		error = true
 	}
-	if os.Getenv("DB_HOST")==""{
-		fmt.Println("DB_HOST not found")
+	if os.Getenv("DB_HOST") == "" {
+		log.Println("DB_HOST not found")
 		error = true
 	}
-	if os.Getenv("JWT_SECRET")==""{
-		fmt.Println("JWT_SECRET not found")
+	if os.Getenv("JWT_SECRET") == "" {
+		log.Println("JWT_SECRET not found")
 		error = true
 	}
-	if os.Getenv("DB_NAME")==""{
-		fmt.Println("DB_NAME not found")
+	if os.Getenv("DB_NAME") == "" {
+		log.Println("DB_NAME not found")
 		error = true
 	}
-	if os.Getenv("DB_PORT")==""{
-		fmt.Println("DB_PORT not found")
+	if os.Getenv("DB_PORT") == "" {
+		log.Println("DB_PORT not found")
 		error = true
 	}
 	return error
 }
 func main() {
-	if err := godotenv.Load();err!=nil{
-		if load_env_vars()==true{
+	if err := godotenv.Load(); err != nil {
+		if load_env_vars() == true {
 			log.Fatal("All environment variables not found")
 		}
 	}
@@ -56,8 +56,8 @@ func main() {
 	allowedOrigins := os.Getenv("ALLOWED_ORIGINS")
 	app := fiber.New()
 	app.Use(cors.New(cors.Config{
-		AllowOrigins:allowedOrigins,
-		AllowHeaders:"Origin, Content-Type, Accept",
+		AllowOrigins: allowedOrigins,
+		AllowHeaders: "Origin, Content-Type, Accept",
 	}))
 	router.StartRouter(app)
 	app.Listen(":8080")

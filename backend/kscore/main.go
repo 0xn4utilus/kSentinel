@@ -5,6 +5,8 @@ import (
 	"log"
 	"os"
 
+	"github.com/InfoSecIITR/kSentinel/kscore/controllers"
+	"github.com/InfoSecIITR/kSentinel/kscore/database"
 	"github.com/InfoSecIITR/kSentinel/kscore/router"
 	"github.com/gofiber/fiber/v2"
 	"github.com/joho/godotenv"
@@ -12,11 +14,11 @@ import (
 )
 
 func checkEnvVars()bool{
-	var error bool
+	var err bool
 	if os.Getenv("KSCORE_SERVICE_PORT")==""{
-		error = true
+		err = true
 	}
-	return error
+	return err
 }
 func main() {
 	err := godotenv.Load()
@@ -25,6 +27,9 @@ func main() {
 			log.Fatal("Error! Cannot read environment variables")
 		}
 	}
+	
+	db := database.InitDb()
+	controllers.Db = db
 	app := fiber.New()
 	router.StartRouter(app)
 	port_env := os.Getenv("KSCORE_SERVICE_PORT")
@@ -32,5 +37,8 @@ func main() {
 		log.Fatal("Environment variable KSCORE_SERVICE_PORT not found")
 	}
 	port := fmt.Sprintf(":%s",port_env)
-	app.Listen(port)
+	err = app.Listen(port)
+	if err!=nil{
+		panic(err)
+	}
 }

@@ -44,20 +44,14 @@ void setup_parser(int argc, char** argv){
         }
     }
     else if(program["--login"]==true){
-        Auth* auth = new Auth;
-        auth->login();
-        delete auth;
+        Auth auth;
+        auth.login();
     }
     else if(program["--run"]==true){
         Runner* runner = new Runner();
-        OtherUtils::check_required_env_vars();
         if(!runner->is_ksentinel_running()){
             runner->run();
         }
         delete runner;
     }
-}
-
-void run(){
-
 }
