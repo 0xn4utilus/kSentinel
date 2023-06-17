@@ -10,36 +10,15 @@ import {
   List,
   ListItem,
   ListItemText,
-  makeStyles,
   useMediaQuery,
   useTheme,
   Avatar,
 } from '@material-ui/core';
 import { Dashboard, Settings, Build, Menu } from '@material-ui/icons';
-
-const useStyles = makeStyles((theme) => ({
-  toolbar: {
-    display: 'flex',
-    justifyContent: 'space-between',
-    backgroundColor: '#3f51b5', // Replace with your desired background color
-  },
-  navbarButton: {
-    marginLeft: theme.spacing(2),
-  },
-  mobileMenuButton: {
-    marginRight: theme.spacing(2),
-  },
-  list: {
-    width: 250,
-  },
-  linkContainer: {
-    display: 'flex',
-    alignItems: 'center',
-  },
-}));
+import { navbarTemplate } from '../Themes';
 
 const Navbar = () => {
-  const classes = useStyles();
+  const classes = navbarTemplate();
   const theme = useTheme();
   const isSmallScreen = useMediaQuery(theme.breakpoints.down('sm'));
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
