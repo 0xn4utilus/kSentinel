@@ -1,44 +1,14 @@
 import React, { useState } from 'react';
-import { TextField, Box, Button, Typography, Snackbar } from '@material-ui/core';
+import { TextField, Button, Typography } from '@material-ui/core';
 import LockOutlinedIcon from '@material-ui/icons/LockOutlined';
-import { makeStyles } from '@material-ui/core/styles';
 import { registerRoute } from '../../constants';
 import Alert from "@mui/material/Alert";
-import Stack from "@mui/material/Stack";
 import {useNavigate} from "react-router-dom";
-
-const useStyles = makeStyles((theme) => ({
-    container: {
-        display: 'flex',
-        justifyContent: 'center',
-        alignItems: 'center',
-        height: '100vh',
-        background: `linear-gradient(to right, ${theme.palette.primary.main}, ${theme.palette.secondary.main})`,
-    },
-    formContainer: {
-        display: 'flex',
-        flexDirection: 'column',
-        alignItems: 'center',
-        padding: theme.spacing(2),
-        borderRadius: theme.spacing(1),
-        boxShadow: '0px 0px 10px rgba(0, 0, 0, 0.1)',
-        backgroundColor: 'rgba(255, 255, 255, 0.8)',
-    },
-    avatar: {
-        margin: theme.spacing(1),
-        backgroundColor: theme.palette.primary.main,
-    },
-    input: {
-        margin: theme.spacing(1),
-    },
-    submitButton: {
-        margin: theme.spacing(2, 0),
-    },
-}));
+import { loginTemplate } from '../Themes';
 
 const Register = () => {
     const navigate = useNavigate();
-    const classes = useStyles();
+    const classes = loginTemplate();
     const [userData, setUserData] = useState({ username: "", password: "", email: "" });
     const [emailError, setEmailError] = useState(false);
     const [submitDisabled, setSubmitDisabled] = useState(true);
