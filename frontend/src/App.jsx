@@ -4,6 +4,7 @@ import Register from "./Components/Register";
 import Configuration from "./Components/Configuration";
 import Dashboard from "./Components/Dashboard";
 import Settings from "./Components/Settings";
+import ForgotPassword from "./Components/ForgotPassword";
 
 function App() {
 
@@ -14,6 +15,7 @@ function App() {
           <Route path="/" element={<Login/>}/>
           <Route path="/login" element={<Login/>}/>
           <Route path="/register" element={<Register/>}/>
+          <Route path="/forgotPassword" element={<ForgotPassword/>}/>
           <Route path="/configuration" element={<Configuration/>}/>
           <Route path="/dashboard" element={<Dashboard/>}/>
           <Route path="/settings" element={<Settings/>}/>

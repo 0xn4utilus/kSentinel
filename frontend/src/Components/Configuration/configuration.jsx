@@ -9,47 +9,10 @@ import {
   Typography,
 } from '@material-ui/core';
 import InputFields from './inputFields';
-
-const useStyles = makeStyles((theme) => ({
-  pageContainer: {
-    backgroundColor: '#FDF6E3',
-    minHeight: '100vh',
-    display: 'flex',
-    flexDirection: 'column',
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-  card: {
-    marginBottom: theme.spacing(3),
-    padding: theme.spacing(2),
-    backgroundColor: '#F3F7F9',
-    boxShadow: '0px 3px 6px rgba(0, 0, 0, 0.16)',
-    borderRadius: 8,
-  },
-  title: {
-    marginBottom: theme.spacing(2),
-    color: '#333333',
-    fontWeight: 'bold',
-  },
-  button: {
-    marginRight: theme.spacing(2),
-    backgroundColor: 'green',
-    color: '#FFFFFF',
-    '&:hover': {
-      backgroundColor: '#C51162',
-    },
-  },
-  inputField: {
-    marginBottom: theme.spacing(2),
-  },
-  inputContainer: {
-    display: 'flex',
-    alignItems: 'center',
-  },
-}));
+import { configTemplate } from '../Themes';
 
 const Tracing = () => {
-  const classes = useStyles();
+  const classes = configTemplate();
 
   return (
     <Card className={classes.card}>
@@ -72,7 +35,7 @@ const Tracing = () => {
 };
 
 const Blocking = () => {
-  const classes = useStyles();
+  const classes = configTemplate();
 
   return (
     <Card className={classes.card}>
@@ -95,7 +58,7 @@ const Blocking = () => {
 };
 
 const Info = () => {
-  const classes = useStyles();
+  const classes = configTemplate();
 
   return (
     <Card className={classes.card}>
@@ -129,7 +92,7 @@ const Info = () => {
 };
 
 const Page = () => {
-  const classes = useStyles();
+  const classes = configTemplate();
 
   return (
     <div className={classes.pageContainer}>

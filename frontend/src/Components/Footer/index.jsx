@@ -1,18 +1,9 @@
 import React from 'react';
-import { Typography, Link, makeStyles } from '@material-ui/core';
-
-const useStyles = makeStyles((theme) => ({
-  footer: {
-    backgroundColor: theme.palette.primary.main,
-    padding: theme.spacing(2),
-    textAlign: 'center',
-    color: theme.palette.primary.contrastText,
-    marginTop: 'auto',
-  },
-}));
+import { Typography, Link } from '@material-ui/core';
+import { footerTemplate } from '../Themes';
 
 const Footer = () => {
-  const classes = useStyles();
+  const classes = footerTemplate();
 
   return (
     <footer className={classes.footer}>
