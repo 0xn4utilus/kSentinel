@@ -8,6 +8,7 @@
 #include<device.hpp>
 #include<logger.hpp>
 #include<unistd.h>
+#include<auth.hpp>
 
 Runner:: Runner(){
 }
@@ -32,9 +33,13 @@ bool Runner::is_ksentinel_running(){
 void Runner::run(){
     signal(SIGINT,term_sighandler);
     signal(SIGTSTP,term_sighandler);
+    Auth auth;
+    if(!auth.is_logged_in()){
+        std::exit(1);
+    }
+    Logger::info("Login successful");
     {
         DeviceUtils device_utils;
-        Logger::info("Starting device registration");
         device_utils.register_device();
     }
     while(1){

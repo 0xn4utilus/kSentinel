@@ -88,7 +88,7 @@ bool DeviceUtils::register_device(){
     umap["device_id"] = this->generate_device_id();
     umap["device_kernel"] = this->get_kernel_version();
     umap["device_type"] = this->get_device_type();
-    Logger::info("Checking device status");
+    Logger::info("Verifying registration status");
     bool result;
     if(!this->is_device_registered(umap["device_id"])){
         HttpRequest http_request(this->device_reg_url);
