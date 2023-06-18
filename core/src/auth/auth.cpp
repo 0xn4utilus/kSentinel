@@ -5,6 +5,7 @@
 #include<networking.hpp>
 #include<utils.hpp>
 #include<json/json.hpp>
+#include<logger.hpp>
 
 using json = nlohmann::json;
 
@@ -51,15 +52,42 @@ void Auth::login(){
             std::ofstream ofile(tokenFile,std::ios::out);
             ofile.write(token.c_str(),token.length());
             ofile.close();
-            std::cout<<"Login successful"<<std::endl;
+            Logger::verbose("Loggin successful");
         }
         else{
-            std::cerr<<message<<std::endl;
+            Logger::error(message);
         }
     }
 }
 
+bool Auth::validate_auth_token(std::string token,std::string config_file){
+    YamlUtils<std::string> yaml_utils;    
+    std::string kscore_env = yaml_utils.read_config_var("KS_AUTH_API");
+    if(kscore_env.length()==0){
+        Logger::error("Error! Failed to read KS_AUTH_API from the configuration file");
+        return false;
+    }
+    std::string url = kscore_env+"/validate/"+token;
+    HttpRequest http_request(url);
+    std::unique_ptr<http_response>response = http_request.http_get();
+    if(response->success==false || response->status_code!=200){
+        Logger::error(response->response);
+        return false;
+    }
+    return true;
+}
+
 bool Auth::is_logged_in(){
-    // Read the token from $KS_CONFIG_DIR/.kst
-    // Validate the token by sending a post request to /api/auth/validate_token
+    const char* config_dir = std::getenv("KS_CONFIG_DIR");
+    if(!config_dir){
+        Logger::error("Error! Environment variable KS_CONFIG_DIR not found");
+        return false;
+    }
+    std::string config_dir_str = std::string(config_dir);
+    std::string tokenFile = config_dir_str+"/.kst";
+    std::ifstream ifile(tokenFile,std::ios::in);
+    std::stringstream streambuf;
+    streambuf<<ifile.rdbuf();
+    ifile.close();
+    return this->validate_auth_token(streambuf.str(),config_dir_str+"/config.yml");
 }

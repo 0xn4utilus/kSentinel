@@ -17,6 +17,7 @@ const Register = () => {
     const [alertSx,setAlertSx] = useState({ "width": "100%","display":"none" });
 
     async function submitData() {
+        console.log(userData);
         setTimeout(()=>{
             setAlertSx({ "width": "100%","display":"none" });
         },5000);
@@ -117,7 +118,6 @@ const Register = () => {
                     variant="outlined"
                     onChange={(e) => {
                         setUserData({ username: userData.username, email: userData.email, password: e.target.value })
-                        validateData();
                     }}
                     fullWidth
                     type="password"
