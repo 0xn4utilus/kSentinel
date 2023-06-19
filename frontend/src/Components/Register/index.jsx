@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { TextField, Button, Typography } from '@material-ui/core';
+import { TextField, Button, Typography,Link } from '@material-ui/core';
 import LockOutlinedIcon from '@material-ui/icons/LockOutlined';
 import { registerRoute } from '../../constants';
 import Alert from "@mui/material/Alert";
@@ -134,7 +134,9 @@ const Register = () => {
                     Submit
                 </Button>
                 <Alert sx={alertSx} onClose={closeAlert}  variant='filled' severity={alertSeverity}>{alertMessage}</Alert>
-
+                <Link href="/login">
+                    Login
+                </Link>
             </div>
         </div>
     );

@@ -22,6 +22,7 @@ const loginTemplate = makeStyles((theme) => ({
     avatar: {
         margin: theme.spacing(1),
         backgroundColor: theme.palette.primary.main,
+        fontSize:60,
     },
     input: {
         margin: theme.spacing(1),

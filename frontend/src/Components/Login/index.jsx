@@ -14,7 +14,7 @@ const LoginPage = () => {
   return (
     <div className={classes.container}>
       <div className={classes.formContainer}>
-        <LockOutlinedIcon className={classes.avatar} style={{fontSize:60}} />
+        <LockOutlinedIcon className={classes.avatar} />
         <Typography component="h1" variant="h5">
           Sign in
         </Typography>
@@ -49,9 +49,14 @@ const LoginPage = () => {
         >
           Submit
         </Button>
-        <Link href="/forgotPassword">
-          Forgot Password?
-        </Link>
+        <div className='flex flex-col items-center'>
+          <Link href="/forgotPassword">
+            Forgot Password?
+          </Link>
+          <Link href="/register">
+            Register Now
+          </Link>
+        </div>
       </div>
     </div>
   );
