@@ -24,12 +24,12 @@ const ForgotPassword = () =>{
                     <div className={classes.formContainer}>
                         {
                             isDataValid &&(
-                                <LockOutlinedIcon className={classes.avatar} style={{fontSize:60}}/>
+                                <LockOutlinedIcon className={classes.avatar} />
                             )}
                         {
                             !isDataValid && (
                                 <div className="flex flex-col items-center">
-                                    <ErrorOutlineOutlinedIcon className={classes.avatar} style={{fontSize:60}}/>
+                                    <ErrorOutlineOutlinedIcon className={classes.avatar} />
                                     <Typography component="h1" variant="h4">
                                         User Not found
                                     </Typography>
@@ -64,7 +64,7 @@ const ForgotPassword = () =>{
             {
                 isDataSent && (
                     <div className={classes.formContainer}>
-                        <CheckCircleOutlinedIcon className={classes.avatar} style={{fontSize:60}}/>
+                        <CheckCircleOutlinedIcon className={classes.avatar}/>
                         <Typography component="h1" variant="h4">
                             Password Reset Sucessful.
                         </Typography>
