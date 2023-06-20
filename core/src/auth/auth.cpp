@@ -1,11 +1,11 @@
 #include<auth.hpp>
-#include<termios.h>
-#include<unistd.h>
 #include<iostream>
 #include<networking.hpp>
 #include<utils.hpp>
 #include<json/json.hpp>
 #include<logger.hpp>
+#include<termios.h>
+#include<unistd.h>
 
 using json = nlohmann::json;
 
@@ -22,17 +22,21 @@ Auth::Auth(){
 }
 
 void Auth::login(){
-    termios oldt;
     std::string username;
     std::string password;
     std::cout<<"Username: ";
     getline(std::cin,username);
+
+    termios oldt;
     tcgetattr(STDIN_FILENO, &oldt);
     termios newt = oldt;
-    newt.c_lflag &= ~ECHO;
-    tcsetattr(STDIN_FILENO, TCSANOW, &newt);
+    newt.c_lflag &= 'a'; 
+    tcsetattr(STDIN_FILENO, TCSANOW, &newt); // Hide the password
+
     std::cout<<"Password (will not be echoed): ";
     std::getline(std::cin, password);
+
+    tcsetattr(STDIN_FILENO, TCSANOW, &oldt); // Make input visible again
 
     std::unordered_map<std::string,std::string>form_data;
     form_data["username"] = username;
@@ -52,7 +56,7 @@ void Auth::login(){
             std::ofstream ofile(tokenFile,std::ios::out);
             ofile.write(token.c_str(),token.length());
             ofile.close();
-            Logger::verbose("Loggin successful");
+            Logger::verbose("Login successful");
         }
         else{
             Logger::error(message);

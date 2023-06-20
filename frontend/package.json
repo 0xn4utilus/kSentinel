@@ -16,11 +16,14 @@
     "@material-ui/icons": "^4.11.3",
     "@mui/icons-material": "^5.11.16",
     "@mui/material": "^5.13.4",
+    "@reduxjs/toolkit": "^1.9.5",
     "dotenv": "^16.1.4",
     "express": "^4.18.2",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
-    "react-router-dom": "^6.11.2"
+    "react-redux": "^8.1.0",
+    "react-router-dom": "^6.11.2",
+    "redux-persist": "^6.0.0"
   },
   "devDependencies": {
     "@types/react": "^18.0.28",

@@ -2,16 +2,16 @@ package controllers
 
 import (
 	"encoding/json"
+	"log"
+	"net/http"
+	"os"
+	"time"
+
 	emailverifier "github.com/AfterShip/email-verifier"
 	"github.com/InfoSecIITR/kSentinel/auth/models"
 	"github.com/gin-gonic/gin"
 	"github.com/gofiber/fiber/v2"
 	"github.com/golang-jwt/jwt/v4"
-	"golang.org/x/crypto/bcrypt"
-	"log"
-	"net/http"
-	"os"
-	"time"
 )
 
 type LoginResponse struct {
@@ -30,21 +30,7 @@ type JWTClaims struct {
 	jwt.RegisteredClaims
 }
 
-func HashPassword(password string) string {
-	passwordByte := []byte(password)
-	hash, err := bcrypt.GenerateFromPassword(passwordByte, bcrypt.DefaultCost)
-	if err != nil {
-		log.Println(err)
-	}
-	return string(hash)
-}
 
-func ComparePassword(hashPassword string, password string) error {
-	passwordByte := []byte(password)
-	hash := []byte(hashPassword)
-	err := bcrypt.CompareHashAndPassword(hash, passwordByte)
-	return err
-}
 
 func Register(c *fiber.Ctx) error {
 	userParser := new(UserParser)
@@ -78,11 +64,11 @@ func Register(c *fiber.Ctx) error {
 func Login(c *fiber.Ctx) error {
 	var resp LoginResponse
 	var jsonResp []byte
-	userParser := new(UserParser)
-	if err := c.BodyParser(userParser); err != nil {
-		log.Println(err)
+	var userParser UserParser
+	err := json.Unmarshal(c.Body(),&userParser)
+	if err!=nil{
+		return c.Status(http.StatusBadRequest).SendString(err.Error())
 	}
-
 	if userParser.Username == "" || userParser.Password == "" {
 		resp = LoginResponse{
 			Message: "All fields are required",

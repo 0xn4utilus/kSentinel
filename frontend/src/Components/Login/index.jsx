@@ -2,11 +2,13 @@ import React, { useState } from 'react';
 import { TextField , Button, Typography, Link } from '@material-ui/core';
 import LockOutlinedIcon from '@material-ui/icons/LockOutlined';
 import { loginTemplate } from '../Themes';
+import { useDispatch } from 'react-redux';
+import { setUser } from '../../slices/userSlice';
 
 const LoginPage = () => {
   const classes = loginTemplate();
   const [userData,setUserData] = useState({"username":"","password":""});
-
+  
   function submitData(){
 
   }

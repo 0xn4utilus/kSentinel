@@ -73,5 +73,7 @@ class OtherUtils{
     static void check_required_env_vars();
     static std::string generate_rand_string(int len, int type);
     static int generate_random_num(int lower,int upper);
+    static void disable_input_hiding();
+    static void enable_input_hiding();
 };
 #endif
