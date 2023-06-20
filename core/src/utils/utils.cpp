@@ -4,6 +4,8 @@
 #include<networking.hpp>
 #include<yaml.hpp>
 #include<ctime>
+#include<termios.h>
+#include<unistd.h>
 
 bool check_status(){
     HttpRequest httpRequest("http://localhost:8080");
@@ -55,4 +57,18 @@ void OtherUtils::check_required_env_vars(){
         puts("Environment variable KS_CONFIG_DIR not found");
         exit(0);
     }
+}
+
+void OtherUtils::disable_input_hiding(){
+    termios tty;
+    tcgetattr(STDIN_FILENO, &tty);
+    tty.c_lflag &= ~ECHO;
+    tcsetattr(STDIN_FILENO, TCSANOW, &tty);
+}
+
+void OtherUtils::enable_input_hiding(){
+    termios tty;
+    tcgetattr(STDIN_FILENO, &tty);
+    tty.c_lflag |= ECHO;
+    tcsetattr(STDIN_FILENO, TCSANOW, &tty);
 }

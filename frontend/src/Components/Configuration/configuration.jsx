@@ -10,6 +10,7 @@ import {
 } from '@material-ui/core';
 import InputFields from './inputFields';
 import { configTemplate } from '../Themes';
+import { blockingFields, tracingFields } from './data';
 
 const Tracing = () => {
   const classes = configTemplate();
@@ -21,13 +22,7 @@ const Tracing = () => {
           Tracing
         </Typography>
         <InputFields
-          props={[
-            { placeholder: 'sys_enter_execve', label: 'sys_enter*' },
-            { placeholder: 'prepare_kernel_cred', label: 'kfunction_entry' },
-            { placeholder: 'prepare_kernel_cred', label: 'kfunction_exit' },
-            { placeholder: 'puts', label: 'ufunction_entry' },
-            { placeholder: 'puts', label: 'ufunction_exit' },
-          ]}
+          props={tracingFields}
         />
       </CardContent>
     </Card>
@@ -44,13 +39,7 @@ const Blocking = () => {
           Blocking
         </Typography>
         <InputFields
-          props={[
-            { placeholder: 'sys_enter_execve', label: 'sys_enter*' },
-            { placeholder: 'prepare_kernel_cred', label: 'kfunction_entry' },
-            { placeholder: 'prepare_kernel_cred', label: 'kfunction_exit' },
-            { placeholder: 'puts', label: 'ufunction_entry' },
-            { placeholder: 'puts', label: 'ufunction_exit' },
-          ]}
+          props={blockingFields}
         />
       </CardContent>
     </Card>
