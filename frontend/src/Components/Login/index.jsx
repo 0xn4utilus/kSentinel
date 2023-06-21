@@ -4,13 +4,43 @@ import LockOutlinedIcon from '@material-ui/icons/LockOutlined';
 import { loginTemplate } from '../Themes';
 import { useDispatch } from 'react-redux';
 import { setUser } from '../../slices/userSlice';
+import { loginRoute } from '../../constants';
+import { simpleJsonPost } from '../../helpers/httphelpers';
+import { Alert } from '@mui/material';
+import { useNavigate } from 'react-router-dom';
 
 const LoginPage = () => {
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
   const classes = loginTemplate();
   const [userData,setUserData] = useState({"username":"","password":""});
-  
-  function submitData(){
+  const [alertSx,setAlertSx] = useState({ "width": "100%","display":"none" });
+  const [alertSeverity,setAlertSeverity] = useState("error");
+  const [alertMessage,setAlertMessage] = useState("");
 
+  function closeAlert() {
+    setAlertSx({ "width": "100%","display":"none" });
+  }
+
+  async function submitData(){
+    setTimeout(()=>{
+      setAlertSx({ "width": "100%","display":"none" });
+    },5000)
+    const [status,data] = await simpleJsonPost(loginRoute,userData)
+    setAlertSx({ "width": "100%","display":"inherit" });
+    if(status!=200){
+      setAlertSeverity("error");
+      setAlertMessage(data.Message);
+    }
+    else{
+      setAlertSx({ "width": "100%","display":"none" });
+      let token = data.Token;
+      dispatch(setUser({
+        username:userData.username,
+        token:token
+      }));
+      navigate("/dashboard");
+    }
   }
 
   return (
@@ -51,6 +81,7 @@ const LoginPage = () => {
         >
           Submit
         </Button>
+        <Alert sx={alertSx} onClose={closeAlert}  variant='filled' severity={alertSeverity}>{alertMessage}</Alert>
         <div className='flex flex-col items-center'>
           <Link href="/forgotPassword">
             Forgot Password?

@@ -86,7 +86,7 @@ const Page = () => {
   return (
     <div className={classes.pageContainer}>
       <Tracing />
-      <Blocking />
+      <Blocking/>
       <Info />
     </div>
   );
