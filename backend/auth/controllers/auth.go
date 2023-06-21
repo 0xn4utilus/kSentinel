@@ -2,6 +2,7 @@ package controllers
 
 import (
 	"encoding/json"
+	"fmt"
 	"log"
 	"net/http"
 	"os"
@@ -66,6 +67,8 @@ func Login(c *fiber.Ctx) error {
 	var jsonResp []byte
 	var userParser UserParser
 	err := json.Unmarshal(c.Body(),&userParser)
+	fmt.Println(userParser.Username)
+	fmt.Println(userParser.Password)
 	if err!=nil{
 		return c.Status(http.StatusBadRequest).SendString(err.Error())
 	}
