@@ -16,22 +16,35 @@ import {
 } from '@material-ui/core';
 import { Dashboard, Settings, Build, Menu } from '@material-ui/icons';
 import { navbarTemplate } from '../Themes';
+import { useSelector } from 'react-redux';
+import { selectUser } from '../../slices/userSlice';
 
 const Navbar = () => {
   const classes = navbarTemplate();
   const theme = useTheme();
   const isSmallScreen = useMediaQuery(theme.breakpoints.down('sm'));
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const userName = useSelector(selectUser);
 
-  const handleMobileMenuToggle = () => {
-    setMobileMenuOpen(!mobileMenuOpen);
-  };
+  function isLoggedIn(){
+    return String(userName).length>0
+  }
+  
+  function LoggedOutItems() {
+    return <div className={classes.linkContainer}>
+      <Button color="inherit" component={Link} to="/login" className={classes.navbarButton}>
+        <Dashboard style={{ marginRight: 5 }} />
+        Login
+      </Button>
+      <Button color="inherit" component={Link} to="/register" className={classes.navbarButton}>
+        <Build style={{ marginRight: 5 }} />
+        Register
+      </Button>
 
-  const renderDesktopButtons = () => {
-    if (isSmallScreen) {
-      return null;
-    }
+    </div>
+  }
 
+  function LoggedInItems(){
     return (
       <div className={classes.linkContainer}>
         <Button color="inherit" component={Link} to="/dashboard" className={classes.navbarButton}>
@@ -48,6 +61,18 @@ const Navbar = () => {
         </Button>
       </div>
     );
+  }
+
+  const handleMobileMenuToggle = () => {
+    setMobileMenuOpen(!mobileMenuOpen);
+  };
+
+  const renderDesktopButtons = () => {
+    if (isSmallScreen) {
+      return null;
+    }
+
+    return isLoggedIn()===true?<LoggedInItems/>:<LoggedOutItems/>
   };
 
   const renderMobileMenu = () => (
@@ -71,8 +96,8 @@ const Navbar = () => {
       <Toolbar className={classes.toolbar}>
         <Typography variant="h6">
           <div>
-          <Avatar src='kslogo1.png'/>
-          kSentinel
+            <Avatar src='kslogo1.png' />
+            kSentinel
           </div>
         </Typography>
         {isSmallScreen ? (

@@ -5,6 +5,7 @@ import Configuration from "./Components/Configuration";
 import Dashboard from "./Components/Dashboard";
 import Settings from "./Components/Settings";
 import ForgotPassword from "./Components/ForgotPassword";
+import Home from "./Components/Home";
 
 function App() {
 
@@ -12,7 +13,7 @@ function App() {
     <>
       <BrowserRouter>
         <Routes>
-          <Route path="/" element={<Login/>}/>
+          <Route path="/" element={<Home/>}/>
           <Route path="/login" element={<Login/>}/>
           <Route path="/register" element={<Register/>}/>
           <Route path="/forgotPassword" element={<ForgotPassword/>}/>

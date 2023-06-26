@@ -11,6 +11,7 @@ func StartRouter(app* fiber.App){
 	authRouter.Get("/test",controllers.Test)
 	authRouter.Get("/decodecookie/:token",controllers.DecodeCookie)
 	authRouter.Get("/validate/:token",controllers.ValidateToken)
+	// authRouter.Get("/devices/:token",controllers.)
 	authRouter.Post("/login",controllers.Login)
 	authRouter.Post("/register",controllers.Register)
 }

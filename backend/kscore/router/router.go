@@ -10,4 +10,5 @@ func StartRouter(app *fiber.App) {
 	route := apiGroup.Group("/kscore")
 	route.Post("/device",controllers.CreateDevice)
 	route.Get("/checkdevice/:deviceid",controllers.CheckDevice)
+	route.Post("/events/:deviceid",controllers.CreateEvent)
 }

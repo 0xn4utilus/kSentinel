@@ -1,5 +1,6 @@
 import Footer from "../Footer"
 import Navbar from "../Navbar"
+import AuthChecker from "../Authchecker";
 
 const styles = {
     container: {
@@ -15,6 +16,7 @@ const styles = {
 export default function Layout({ children }) {
     return <div style={styles.container}>
         <Navbar/>
+        <AuthChecker/>
         <div style={styles.content}>
             {children}
         </div>

@@ -33,24 +33,24 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const InputBox = React.memo(({ label, placeholder,type, handleChange }) => {
+const InputBox = React.memo(({ label, placeholder, type, handleChange }) => {
   const classes = useStyles();
   return (
-    <Grid  item xs={12} sm={6}>
+    <Grid item xs={12} sm={6}>
       <div className={classes.boxContainer}>
         <TextField
           label={label}
           placeholder={placeholder}
           className={classes.textField}
           variant="outlined"
-          onChange={(e) => handleChange(e,label)}
+          onChange={(e) => handleChange(e, label)}
         />
         <TextField
           label="message"
           placeholder={`Custom error message`}
           className={classes.textField}
           variant="outlined"
-          onChange={(e) => handleChange(label + "-message")}
+          onChange={(e) => handleChange(e, label + "-message")}
         />
       </div>
     </Grid>
@@ -64,17 +64,20 @@ export default function InputFields({ props }) {
   function handleChange(e, label) {
     setData((prevData) => ({
       ...prevData,
-      [ label]: e.target.value,
+      [label]: e.target.value,
     }));
   }
 
   function submitData() {
-    if(props[0].type==="tracing"){
-      alert("Tracing")
+    const type = props[0].type;
+    const events = Object.keys(data).filter(key=>!key.includes("message"));
+    const finalData = [];
+    let messageKey;
+    for(let event of events){
+      messageKey = event+"-message";
+      finalData.push({"type":event,"name":data[event],"message":data[messageKey]==undefined?"":data[messageKey],"mode":type});
     }
-    else if(props[0].type==="blocking"){
-      alert("Blocking")
-    }
+    console.log(finalData);
   }
 
   return (
