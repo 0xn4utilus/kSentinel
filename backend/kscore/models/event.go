@@ -34,3 +34,10 @@ func (event* Event) UpdateEvent(){
 	db := globals.Db
 	db.Model(event).Where("device_id = ? AND name = ? AND mode = ?",event.DeviceId,event.Name,event.Mode).Update("message",event.Message)
 }
+
+func (event* Event)ReadEvents(deviceId string)([]Event){
+	db := globals.Db
+	var events[] Event
+	db.Find(&events,Event{DeviceId:deviceId})
+	return events
+}

@@ -1,6 +1,10 @@
 #ifndef DEVICE_H
 #define DEVICE_H
 #include<string>
+#include<json/json.hpp>
+
+using nlohmann::json;
+
 class DeviceUtils{
     std::string device_reg_url;
     std::string device_check_url;
@@ -14,6 +18,7 @@ class DeviceUtils{
     std::string get_device_type();
     bool register_device();
     bool is_device_registered(std::string);
+    std::string fetch_events();
 };
 
 class HostDetection{

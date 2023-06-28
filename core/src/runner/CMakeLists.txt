@@ -1,1 +1,1 @@
-add_library(runner runner.cpp)
+add_library(runner runner.cpp ksmain.cpp)

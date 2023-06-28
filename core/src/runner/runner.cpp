@@ -43,7 +43,8 @@ void Runner::run(){
         device_utils.register_device();
     }
     while(1){
-        sleep(5);
+        this->ks_main();
+        break;
     }
 }
 

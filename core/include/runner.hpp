@@ -14,6 +14,7 @@ class Runner{
     Runner();
     static void term_sighandler(int);
     static void ks_fatal(std::string message);
+    void ks_main();
     ~Runner();
 };
 #endif

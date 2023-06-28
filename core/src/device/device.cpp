@@ -9,6 +9,32 @@
 #include<networking.hpp>
 #include <algorithm>
 
+std::string DeviceUtils::get_device_id(){
+    const char* env = std::getenv("KS_CONFIG_DIR");
+    if(!env){
+        Logger::fatal("Error! Environment variable KS_CONFIG_DIR not found");
+    }
+    std::string fileName = std::string(env)+"/.ksdata";
+    std::string device_id;
+    std::ifstream ifile(fileName);
+    std::getline(ifile,device_id);
+    ifile.close(); 
+    return device_id;  
+}
+std::string DeviceUtils::fetch_events(){
+    std::string device_id = this->get_device_id();
+    YamlUtils<std::string> yaml_utils;
+    std::string kscore_api = yaml_utils.read_config_var("KS_KSCORE_API");
+    std::string event_endpoint = kscore_api + "/events/"+device_id;
+    HttpRequest http_request(event_endpoint);
+    std::unique_ptr<http_response> response = http_request.http_get();
+    if(response->status_code!=200){
+        Logger::error(response->response);
+        return nullptr;
+    }
+    return response->response;
+}
+
 DeviceUtils::DeviceUtils(){
     YamlUtils<std::string>* yaml_utils = new YamlUtils<std::string>;
     std::string kscore_api = yaml_utils->read_config_var("KS_KSCORE_API");
