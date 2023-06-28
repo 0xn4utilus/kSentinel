@@ -1,4 +1,4 @@
-export const simpleJsonPost = async(url,body)=>{
+export const simpleJsonPost = async(url,body,responseMode)=>{
     const response = await fetch(url,{
         method:"POST",
         headers:{
@@ -6,7 +6,10 @@ export const simpleJsonPost = async(url,body)=>{
         },
         body:JSON.stringify(body)
     });
-    return [response.status,await response.json()];
+    if(responseMode=="json"){
+        return [response.status,await response.json()];
+    }
+    return [response.status,await response.text()];
 }
 
 export const simpleGet = async(url)=>{

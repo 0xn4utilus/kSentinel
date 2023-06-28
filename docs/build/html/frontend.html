@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Frontend &mdash; kSentinel  documentation</title>
+      <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script src="_static/jquery.js"></script>
+        <script src="_static/_sphinx_javascript_frameworks_compat.js"></script>
+        <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
+        <script src="_static/doctools.js"></script>
+        <script src="_static/sphinx_highlight.js"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Installation" href="coreUsage.html" />
+    <link rel="prev" title="Backend" href="backend.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="index.html" class="icon icon-home">
+            kSentinel
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul>
+<li class="toctree-l1"><a class="reference internal" href="core.html">kSentinel Core</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="backend.html">Backend</a></li>
+</ul>
+<ul class="current">
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Frontend</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#development-mode">Development Mode</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#files-and-directories">Files and Directories</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#routes">Routes</a></li>
+</ul>
+</li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="coreUsage.html">Installation</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">kSentinel</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">Frontend</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="_sources/frontend.md.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="frontend">
+<h1>Frontend<a class="headerlink" href="#frontend" title="Permalink to this heading"></a></h1>
+<hr>
+kSentinel utilizes the power of React, Redux, and Vite to create a seamless and efficient web application that acts as a control panel for multiple `kSentinel` binaries running on servers, containers, etc.. React serves as the foundation for building dynamic user interfaces, providing a component-based approach that enhances code reusability and modularity. Redux acts as a centralized state management tool, allowing us to manage complex application states with ease and facilitate seamless data flow between components. Vite, our build tool, enables rapid development and hot module replacement, ensuring faster reload times and an optimal developer experience. By combining these cutting-edge technologies, we are able to deliver a high-performance and responsive web application that enhances user interactions and overall efficiency.<hr><section id="development-mode">
+<h2>Development Mode<a class="headerlink" href="#development-mode" title="Permalink to this heading"></a></h2>
+<ul class="simple">
+<li><p>Clone the repository if you haven’t already done so : <code class="docutils literal notranslate"><span class="pre">git</span> <span class="pre">clone</span> <span class="pre">https://github.com/InfoSecIITR/kSentinel</span></code></p></li>
+<li><p>Change the current directory to <code class="docutils literal notranslate"><span class="pre">kSentinel/frontend</span></code></p></li>
+<li><p>Install the dependencies if you haven’t already done so: <code class="docutils literal notranslate"><span class="pre">yarn</span> <span class="pre">install</span></code></p></li>
+<li><p>Create a .env file in the frontend directory using the following format.</p></li>
+</ul>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">VITE_AUTH_API_URL</span> <span class="o">=</span> <span class="n">http</span><span class="p">:</span><span class="o">//</span><span class="mf">127.0.0.1</span><span class="p">:</span><span class="mi">8080</span> 
+<span class="n">VITE_KSCORE_API_URL</span> <span class="o">=</span> <span class="n">http</span><span class="p">:</span><span class="o">//</span><span class="mf">127.0.0.1</span><span class="p">:</span><span class="mi">9000</span>
+</pre></div>
+</div>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">VITE_AUTH_API_URL</span></code> : Should be the base url of <code class="docutils literal notranslate"><span class="pre">auth</span></code> service.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">VITE_KSCORE_API_URL</span></code> : Should be the base url of <code class="docutils literal notranslate"><span class="pre">kscore</span></code> service.</p></li>
+<li><p>Now you’re all set. Run the development server: <code class="docutils literal notranslate"><span class="pre">vite</span> <span class="pre">dev</span></code></p></li>
+</ul>
+</section>
+<section id="files-and-directories">
+<h2>Files and Directories<a class="headerlink" href="#files-and-directories" title="Permalink to this heading"></a></h2>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">frontend/src/Components</span></code> : Stores different React components. Each subdirectory in this directory should contain an <code class="docutils literal notranslate"><span class="pre">index.jsx</span></code> file that returns the component. For example:</p></li>
+</ul>
+<div class="highlight-js notranslate"><div class="highlight"><pre><span></span><span class="c1">// frontend/src/Components/sample/index.jsx</span><span class="w"></span>
+
+<span class="k">export</span><span class="w"> </span><span class="k">default</span><span class="w"> </span><span class="kd">function</span><span class="w"> </span><span class="nx">TestComponent</span><span class="p">(){</span><span class="w"></span>
+<span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="nx">something</span><span class="p">;</span><span class="w"></span>
+<span class="p">}</span><span class="w"></span>
+</pre></div>
+</div>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">frontend/assets</span></code> : Contains assets such as images, icons, etc.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">frontend/helpers</span></code> : Contains commonly used functions or items across multiple components.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">frontend/slices</span></code> : Contains Redux slices for state management.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">frontend/store</span></code> : Redux store</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">frontend/constants.js</span></code> : Commonly used constants should be defined here. For example:</p></li>
+</ul>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">const</span> <span class="n">authServer</span> <span class="o">=</span> <span class="n">import</span><span class="o">.</span><span class="n">meta</span><span class="o">.</span><span class="n">env</span><span class="o">.</span><span class="n">VITE_AUTH_API_URL</span><span class="p">;</span>
+<span class="n">const</span> <span class="n">kscoreServer</span> <span class="o">=</span> <span class="n">import</span><span class="o">.</span><span class="n">meta</span><span class="o">.</span><span class="n">env</span><span class="o">.</span><span class="n">VITE_KSCORE_API_URL</span><span class="p">;</span>
+
+<span class="o">//</span> <span class="n">auth</span> <span class="n">service</span> <span class="n">endpoints</span>
+<span class="n">export</span> <span class="n">const</span> <span class="n">registerRoute</span> <span class="o">=</span> <span class="n">authServer</span> <span class="o">+</span> <span class="s2">&quot;/api/auth/register&quot;</span><span class="p">;</span>
+<span class="n">export</span> <span class="n">const</span> <span class="n">loginRoute</span> <span class="o">=</span> <span class="n">authServer</span><span class="o">+</span><span class="s2">&quot;/api/auth/login&quot;</span><span class="p">;</span>
+<span class="n">export</span> <span class="n">const</span> <span class="n">tokenValidationRoute</span> <span class="o">=</span> <span class="n">authServer</span><span class="o">+</span><span class="s2">&quot;/api/auth/validate&quot;</span><span class="p">;</span>
+
+<span class="o">//</span> <span class="n">kscore</span> <span class="n">service</span> <span class="n">endpoints</span>
+<span class="n">export</span> <span class="n">const</span> <span class="n">eventCreationRoute</span> <span class="o">=</span> <span class="n">kscoreServer</span> <span class="o">+</span> <span class="s2">&quot;/api/kscore/events&quot;</span><span class="p">;</span>
+</pre></div>
+</div>
+</section>
+<section id="routes">
+<h2>Routes<a class="headerlink" href="#routes" title="Permalink to this heading"></a></h2>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">/dashboard</span></code> : kSentinel Dashboard</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">/configuration</span></code> : Configuration options for the kSentinel binary</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">/settings</span></code> : Settings for kSentinel frontend</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">/login</span></code> : Login route</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">/register</span></code> : Signup route</p></li>
+</ul>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="backend.html" class="btn btn-neutral float-left" title="Backend" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="coreUsage.html" class="btn btn-neutral float-right" title="Installation" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2023, InfoSecIITR.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

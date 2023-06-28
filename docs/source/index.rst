@@ -21,6 +21,11 @@ Development
 
    backend
 
+.. toctree::
+   :maxdepth: 1
+
+   frontend
+
 Usage
 ===========
 .. toctree::

@@ -1,5 +1,7 @@
 import React, { createContext, useContext, useState } from "react";
 import { Button, Grid, makeStyles, MenuItem, Select, TextField } from "@material-ui/core";
+import { simpleJsonPost } from "../../helpers/httphelpers";
+import { eventCreationRoute } from "../../constants";
 
 const useStyles = makeStyles((theme) => ({
   container: {
@@ -68,7 +70,7 @@ export default function InputFields({ props }) {
     }));
   }
 
-  function submitData() {
+  async function submitData(deviceId) {
     const type = props[0].type;
     const events = Object.keys(data).filter(key=>!key.includes("message"));
     const finalData = [];
@@ -77,7 +79,14 @@ export default function InputFields({ props }) {
       messageKey = event+"-message";
       finalData.push({"type":event,"name":data[event],"message":data[messageKey]==undefined?"":data[messageKey],"mode":type});
     }
-    console.log(finalData);
+    const route = eventCreationRoute+"/"+deviceId;
+    const [status,resp] = await simpleJsonPost(route,finalData,"text");
+    if(status!=200){
+      console.log("Failed to post events");
+    }
+    else{
+      console.log(resp);
+    }
   }
 
   return (
@@ -89,7 +98,7 @@ export default function InputFields({ props }) {
         <Button
           variant="contained"
           className={classes.button}
-          onClick={submitData}
+          onClick={()=>submitData("shady")}
         >
           Save
         </Button>

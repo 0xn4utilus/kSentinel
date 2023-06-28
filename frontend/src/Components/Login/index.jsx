@@ -30,7 +30,7 @@ const LoginPage = () => {
     }, 5000);
 
     try {
-      [status, data] = await simpleJsonPost(loginRoute, userData)
+      [status, data] = await simpleJsonPost(loginRoute, userData,"json")
     }
     catch (err) {
       setAlertSeverity("error");

@@ -4,11 +4,11 @@ import (
 	"fmt"
 	"log"
 	"os"
-
-	"github.com/InfoSecIITR/kSentinel/kscore/controllers"
 	"github.com/InfoSecIITR/kSentinel/kscore/database"
+	"github.com/InfoSecIITR/kSentinel/kscore/globals"
 	"github.com/InfoSecIITR/kSentinel/kscore/router"
 	"github.com/gofiber/fiber/v2"
+	"github.com/gofiber/fiber/v2/middleware/cors"
 	"github.com/joho/godotenv"
 	// "github.com/joho/godotenv"
 )
@@ -29,8 +29,13 @@ func main() {
 	}
 	
 	db := database.InitDb()
-	controllers.Db = db
+	globals.Db = db
+	allowedOrigins := os.Getenv("ALLOWED_ORIGINS")
 	app := fiber.New()
+	app.Use(cors.New(cors.Config{
+		AllowOrigins:allowedOrigins,
+		AllowHeaders:"Origin, Content-Type, Accept",
+	}))
 	router.StartRouter(app)
 	port_env := os.Getenv("KSCORE_SERVICE_PORT")
 	if port_env==""{
