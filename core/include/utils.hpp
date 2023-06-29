@@ -4,6 +4,7 @@
 #include<yaml.hpp>
 #include<envvars.h>
 #include<cstring>
+#include<logger.hpp>
 #include<iostream>
 #include<fstream>
 
@@ -42,6 +43,13 @@ class FileUtils{
             std::cerr<<"Failed to open "+this->filename<<std::endl;
         }
         return data;
+    }
+    static std::string get_config_dir(){
+        const char* config_dir = std::getenv("KS_CONFIG_DIR");
+        if(!config_dir){
+            Logger::fatal("Error! Failed to read the KS_CONFIG_DIR environment variable");
+        }
+        return std::string(config_dir);
     }
 };
 

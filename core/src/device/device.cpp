@@ -8,13 +8,39 @@
 #include<logger.hpp>
 #include<networking.hpp>
 #include <algorithm>
+#include<utils.hpp>
+
+std::string DeviceUtils::get_device_key(){
+    YamlUtils<std::string>yaml_utils;
+    std::string kscore_api = yaml_utils.read_config_var("KS_KSCORE_API");
+    std::string device_id = get_device_id();
+    if(device_id.length()==0){
+        Logger::error("Error! Failed to read device id");
+        return "";
+    }
+    std::string key_retrieval_url = kscore_api + "/key/"+device_id+"?token="+this->get_auth_token();
+    HttpRequest http_request(key_retrieval_url);
+    std::unique_ptr<http_response>response = http_request.http_get();
+    if(response->status_code!=200){
+        Logger::error(response->response);
+        return "";
+    }
+    return response->response;
+}
+
+std::string DeviceUtils::get_auth_token(){
+    std::string config_dir = FileUtils::get_config_dir();
+    std::string token_file = config_dir+"/.kst";
+    std::string token;
+    std::ifstream ifile(token_file);
+    std::getline(ifile,token);
+    ifile.close();  
+    return token;
+}
 
 std::string DeviceUtils::get_device_id(){
-    const char* env = std::getenv("KS_CONFIG_DIR");
-    if(!env){
-        Logger::fatal("Error! Environment variable KS_CONFIG_DIR not found");
-    }
-    std::string fileName = std::string(env)+"/.ksdata";
+    std::string config_dir = FileUtils::get_config_dir();
+    std::string fileName = config_dir+"/.ksdata";
     std::string device_id;
     std::ifstream ifile(fileName);
     std::getline(ifile,device_id);
@@ -67,12 +93,9 @@ std::string DeviceUtils::get_username(){
 }
 
 std::string DeviceUtils::generate_device_id(){
-    const char* config_dir = std::getenv("KS_CONFIG_DIR");
-    if(!config_dir){
-        Logger::fatal("Error! Environment variable KS_CONFIG_DIR not found");
-    }
+    std::string config_dir = FileUtils::get_config_dir();
     std::string device_id = this->get_username();
-    std::ifstream ifile(std::string(config_dir)+"/.ksdata");
+    std::ifstream ifile(config_dir+"/.ksdata");
     std::stringstream buffer;
     buffer<<ifile.rdbuf();
     if(buffer.str().length()==0){
