@@ -28,6 +28,7 @@ func CreateDevice(c *fiber.Ctx) error {
 		log.Println(err)
 	}
 	device.DeviceKey = utils.GenerateRandomString(32) // 256 bit key for AES
+	device.UpdatedAt = "0"
 	db := globals.Db
 	tx := db.Create(device)
 	if tx.Error != nil {
@@ -85,5 +86,18 @@ func FetchKey(c *fiber.Ctx) error {
 		}
 	}
 
+	return c.Status(statusCode).SendString(message)
+}
+
+func FetchLastUpdate(c* fiber.Ctx)error{
+	statusCode := http.StatusOK
+	var device *models.Device
+	var message string
+	deviceId := c.Params("deviceid")
+	timeStamp, status := device.FetchItem("updated_at",deviceId)
+	if status == false{
+		statusCode = http.StatusBadRequest
+	}
+	message = timeStamp
 	return c.Status(statusCode).SendString(message)
 }

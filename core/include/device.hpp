@@ -2,15 +2,21 @@
 #define DEVICE_H
 #include<string>
 #include<json/json.hpp>
+#include<set>
+#include<memory>
+#include<utils.hpp>
+
 
 using nlohmann::json;
 
 class DeviceUtils{
     std::string device_reg_url;
     std::string device_check_url;
+    std::unique_ptr<YamlUtils<std::string>>yaml_utils;
     public:
     DeviceUtils();
     static void check_all_env_vars();
+    void clean_event_logs();
     std::string get_username();
     std::string get_device_id();
     std::string get_device_key();
@@ -18,9 +24,10 @@ class DeviceUtils{
     std::string generate_device_id();
     std::string get_kernel_version();
     std::string get_device_type();
+    std::set<json>fetch_events();
+    bool new_events_added();
     bool register_device();
     bool is_device_registered(std::string);
-    std::string fetch_events();
 };
 
 class HostDetection{

@@ -9,6 +9,77 @@
 #include<networking.hpp>
 #include <algorithm>
 #include<utils.hpp>
+#include<set>
+
+DeviceUtils::DeviceUtils(){
+    this->yaml_utils = std::make_unique<YamlUtils<std::string>>();
+    std::string kscore_api = yaml_utils->read_config_var("KS_KSCORE_API");
+    if(kscore_api.length()==0){
+        std::cerr<<"Error! Failed to fetch KS_KSCORE_API in the configuration file"<<std::endl;
+        std::exit(1);
+    }
+    this->device_check_url = kscore_api + "/checkdevice";
+    this->device_reg_url = kscore_api + "/device";
+}
+
+void DeviceUtils::clean_event_logs(){
+
+}
+
+bool DeviceUtils::new_events_added(){
+    std::string kscore_api_ep = this->yaml_utils->read_config_var("KS_KSCORE_API");
+    std::string url = kscore_api_ep + "/events/lastupdate/"+this->get_device_id();
+    HttpRequest http_request(url);
+    std::unique_ptr<http_response>response = http_request.http_get();
+    if(response->success == false || response->status_code!=200){
+        Logger::error(response->response);
+        return false;
+    }
+    std::string update_timestamp = response->response;
+    std::string ksdata_file = FileUtils::get_config_dir()+"/.ksdata";
+    std::ifstream ifile(ksdata_file);
+    std::string temp;
+    for(int i=0;i<2;++i){
+        getline(ifile,temp);
+    }
+    Logger::debug("Timestamp"+temp);
+    if(temp!=update_timestamp){
+        return true;
+    }
+    return false;
+}
+
+std::set<json>DeviceUtils::fetch_events(){
+    std::string config_dir = FileUtils::get_config_dir();
+    std::string id_file = config_dir + "/.ksdata";
+    std::string event_logs = config_dir+"/ks_events";
+    std::string device_id;
+    json events_json;
+    std::set<json>events;
+    std::stringstream stream_buf;
+    std::ifstream ifile(id_file);
+    std::ifstream ifile1(event_logs);
+
+    getline(ifile,device_id);
+    stream_buf<<ifile1.rdbuf();
+    try{
+        events_json = json::parse(stream_buf.str());
+        for(auto event_json:events_json){
+            if(event_json["device_id"]==device_id){
+                events.insert(event_json);
+            }
+        }
+        if(this->new_events_added()){
+            // fetch all events from the server
+        }
+    }
+    catch(const std::exception &exp){
+        Logger::error(exp.what());
+    }
+    ifile.close();
+    ifile1.close();
+    return events_json;
+}
 
 std::string DeviceUtils::get_device_key(){
     YamlUtils<std::string>yaml_utils;
@@ -47,31 +118,8 @@ std::string DeviceUtils::get_device_id(){
     ifile.close(); 
     return device_id;  
 }
-std::string DeviceUtils::fetch_events(){
-    std::string device_id = this->get_device_id();
-    YamlUtils<std::string> yaml_utils;
-    std::string kscore_api = yaml_utils.read_config_var("KS_KSCORE_API");
-    std::string event_endpoint = kscore_api + "/events/"+device_id;
-    HttpRequest http_request(event_endpoint);
-    std::unique_ptr<http_response> response = http_request.http_get();
-    if(response->status_code!=200){
-        Logger::error(response->response);
-        return nullptr;
-    }
-    return response->response;
-}
 
-DeviceUtils::DeviceUtils(){
-    YamlUtils<std::string>* yaml_utils = new YamlUtils<std::string>;
-    std::string kscore_api = yaml_utils->read_config_var("KS_KSCORE_API");
-    if(kscore_api.length()==0){
-        std::cerr<<"Error! Failed to fetch KS_KSCORE_API in the configuration file"<<std::endl;
-        std::exit(1);
-    }
-    this->device_check_url = kscore_api + "/checkdevice";
-    this->device_reg_url = kscore_api + "/device";
-    delete yaml_utils;
-}
+
 
 void DeviceUtils::check_all_env_vars(){
     bool error = false;

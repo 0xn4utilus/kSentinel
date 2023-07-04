@@ -4,9 +4,13 @@
 #include<semaphore.h>
 #include<string>
 #include<logger.hpp>
+#include<memory>
+#include<device.hpp>
 
 #define KS_SEMAPHORE "ks-semaphore"
+
 class Runner{
+    std::unique_ptr<DeviceUtils>device_utils;
     sem_t* semaphore;
     public:
     bool is_ksentinel_running();

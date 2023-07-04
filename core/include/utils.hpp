@@ -83,5 +83,6 @@ class OtherUtils{
     static int generate_random_num(int lower,int upper);
     static void disable_input_hiding();
     static void enable_input_hiding();
+    static std::string pad_string(std::string,int,char);
 };
 #endif

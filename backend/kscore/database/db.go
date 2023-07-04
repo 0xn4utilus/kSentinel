@@ -25,7 +25,7 @@ func InitDb()*gorm.DB{
 	if err!=nil{
 		log.Fatal(err)
 	}
-	db.Exec("CREATE TABLE IF NOT EXISTS devices(device_id text UNIQUE NOT NULL,device_type text NOT NULL,device_kernel text NOT NULL,device_key text NOT NULL);")
+	db.Exec("CREATE TABLE IF NOT EXISTS devices(device_id text UNIQUE NOT NULL,device_type text NOT NULL,device_kernel text NOT NULL,device_key text NOT NULL, updated_at text NOT NULL);")
 	db.AutoMigrate(&models.Event{})
 	globals.Db = db
 	return db

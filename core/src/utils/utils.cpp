@@ -20,6 +20,14 @@ bool check_status(){
     return false;
 }
 
+std::string OtherUtils::pad_string(std::string input, int len,char pad_value){
+    std::string padded_str = input;
+    while(padded_str.length()%len != 0){
+        padded_str.push_back(pad_value);
+    }
+    return padded_str;
+}
+
 int OtherUtils::generate_random_num(int lower, int upper){
     int range = upper-lower+1;
     int num = std::rand()%range+lower;

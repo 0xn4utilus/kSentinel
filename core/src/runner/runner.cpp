@@ -11,6 +11,7 @@
 #include<auth.hpp>
 
 Runner:: Runner(){
+    this->device_utils = std::make_unique<DeviceUtils>();
 }
 
 bool Runner::is_ksentinel_running(){

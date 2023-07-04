@@ -4,6 +4,7 @@
 #include<iostream>
 #include<json/json.hpp>
 #include<json/json_fwd.hpp>
+#include<logger.hpp>
 
 using nlohmann::json;
 size_t HttpRequest::write_callback(void* contents, size_t size,size_t nmemb,std::string* response){
@@ -18,6 +19,7 @@ std::string HttpRequest::post_map_to_str(std::unordered_map<std::string,std::str
 std::unique_ptr<http_response> HttpRequest::http_get(){
     std::unique_ptr<http_response>response = std::make_unique<http_response>();
     CURL* curl = curl_easy_init();
+    Logger::debug("GET "+this->url);
     if(!curl){
         response->response = "Failed to initialize libcurl";
         response->success = false;
@@ -42,6 +44,7 @@ std::unique_ptr<http_response> HttpRequest::http_get(){
 
 std::unique_ptr<http_response> HttpRequest::http_post(std::unordered_map<std::string,std::string>post_data){
     std::unique_ptr<http_response>response = std::make_unique<http_response>();
+    Logger::debug("POST "+this->url+" "+this->post_map_to_str(post_data));
     CURL* curl = curl_easy_init();
     CURLcode res;
     if(!curl){
