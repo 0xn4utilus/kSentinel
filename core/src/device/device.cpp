@@ -43,6 +43,8 @@ bool DeviceUtils::new_events_added(){
         getline(ifile,temp);
     }
     Logger::debug("Timestamp"+temp);
+    ifile.close();
+
     if(temp!=update_timestamp){
         return true;
     }
@@ -51,16 +53,13 @@ bool DeviceUtils::new_events_added(){
 
 std::set<json>DeviceUtils::fetch_events(){
     std::string config_dir = FileUtils::get_config_dir();
-    std::string id_file = config_dir + "/.ksdata";
     std::string event_logs = config_dir+"/ks_events";
-    std::string device_id;
+    std::string device_id = this->get_device_id();
     json events_json;
     std::set<json>events;
     std::stringstream stream_buf;
-    std::ifstream ifile(id_file);
     std::ifstream ifile1(event_logs);
 
-    getline(ifile,device_id);
     stream_buf<<ifile1.rdbuf();
     try{
         events_json = json::parse(stream_buf.str());
@@ -69,16 +68,36 @@ std::set<json>DeviceUtils::fetch_events(){
                 events.insert(event_json);
             }
         }
+        events_json.clear();
         if(this->new_events_added()){
             // fetch all events from the server
+            std::string kscore_api = yaml_utils->read_config_var("KS_KSCORE_API");
+            std::string event_fetch_ep = kscore_api + "/events/"+device_id;
+            HttpRequest http_request(event_fetch_ep);
+            std::unique_ptr<http_response>response =  http_request.http_get();
+            if(response->status_code!=200 || response->success==false){
+                Logger::error(response->response);
+            }
+            else{
+                events_json = json::parse(response->response);
+                for(auto it:events_json){
+                    events.insert(it);
+                }
+                std::string ksdata_path = this->yaml_utils->get_config_dir()+"/.ksdata";
+                std::ofstream ofile;
+                Logger::debug("Saving timestamp to .ksdata");
+                ofile.open(ksdata_path);
+                ofile.seekp(17);
+                ofile.write("1111111",4);
+                ofile.close();
+            }
         }
     }
     catch(const std::exception &exp){
         Logger::error(exp.what());
     }
-    ifile.close();
     ifile1.close();
-    return events_json;
+    return events;
 }
 
 std::string DeviceUtils::get_device_key(){
@@ -144,15 +163,17 @@ std::string DeviceUtils::generate_device_id(){
     std::string config_dir = FileUtils::get_config_dir();
     std::string device_id = this->get_username();
     std::ifstream ifile(config_dir+"/.ksdata");
-    std::stringstream buffer;
-    buffer<<ifile.rdbuf();
-    if(buffer.str().length()==0){
+    std::string temp;
+    getline(ifile,temp);
+
+    if(temp.length()==0){
         std::string rand_string = OtherUtils::generate_rand_string(10,TYPE_NUMBER);
         device_id += "_"+rand_string;
     }
     else{
-        device_id = buffer.str();
+        device_id = temp;
     }
+    ifile.close();
     return device_id;
 }
 
@@ -200,6 +221,8 @@ bool DeviceUtils::register_device(){
         std::string metadata_file = std::string(config_dir)+"/"+".ksdata";
         std::ofstream ofile(metadata_file,std::ios::out);
         ofile.write(umap["device_id"].c_str(),umap["device_id"].length());
+        ofile.write("\n",1);
+        ofile.write("0",1);
         ofile.close();
         Logger::info(response->response);
     }
@@ -207,14 +230,16 @@ bool DeviceUtils::register_device(){
 }
 
 bool DeviceUtils::is_device_registered(std::string device_id){
-    HttpRequest http_request(this->device_check_url+"/"+device_id);
+    std::string url = this->device_check_url+"/"+device_id;
+    HttpRequest http_request(url);
     std::unique_ptr<http_response>response =  http_request.http_get();
-    if(response->success==false || response->status_code!=200){
-        Logger::fatal(response->response);
-    }
     if(response->response=="Device has not been registered yet"){
         Logger::info(response->response);
         return false;
+    }
+    if(response->success==false || response->status_code!=200){
+        Logger::warning(response->response);
+        std::exit(0);
     }
     Logger::warning(response->response);
     return true;
